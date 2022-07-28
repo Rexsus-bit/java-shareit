@@ -1,4 +1,4 @@
-package com.example.shareit.item;
+package com.example.shareit.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
