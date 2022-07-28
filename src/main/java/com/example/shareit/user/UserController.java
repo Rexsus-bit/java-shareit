@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PatchMapping("{userId}")
-    UserDTO update(@RequestBody UserDTO userDTO, @PathVariable long userId) {
+    UserDTO update(@RequestBody UserDTO userDTO, @PathVariable long userId) throws IllegalAccessException {
         userDTO.setId(userId);
         return Mapper.toUserDto(userService.update(Mapper.toUser(userDTO), userId));
     }

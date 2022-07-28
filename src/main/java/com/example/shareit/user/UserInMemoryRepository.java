@@ -29,11 +29,9 @@ public class UserInMemoryRepository {
         return counter++;
     }
 
-    public User update(User user, long userId) {
+    public User update(User user, long userId) throws IllegalAccessException {
 
         User userToUpdate =  users.get(userId);
-
-        try {
             for (Field field : User.class.getDeclaredFields()) {
                 if (!Modifier.isStatic(field.getModifiers())) {
                     field.setAccessible(true);
@@ -43,9 +41,6 @@ public class UserInMemoryRepository {
                     }
                 }
             }
-        } catch (IllegalAccessException e) {
-            // Handle exception
-        }
         return userToUpdate;
     }
 

@@ -1,7 +1,7 @@
 package com.example.shareit.item;
 
 import com.example.shareit.Mapper;
-import com.example.shareit.exceptions.NotExcistedUserException;
+import com.example.shareit.exceptions.NotExistedUserException;
 import com.example.shareit.user.UserInMemoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class ItemService {
 
     private void itemValidation(Item item) {
         if ( !userRepository.getUsers().containsKey(item.getOwnerId()))
-        throw new NotExcistedUserException();
+        throw new NotExistedUserException();
     }
 
     public Item update(Item item, long userId, long itemId) {

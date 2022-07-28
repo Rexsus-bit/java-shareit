@@ -28,7 +28,7 @@ public class UserService {
         );
     }
 
-    public User update(User user, long userId) {
+    public User update(User user, long userId) throws IllegalAccessException {
         userValidation(user);
         return userRepository.update(user, userId);
     }

@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Booking {
-    long bookingId;
-    LocalDate startDate;
-    LocalDate finishDate;
-    long itemId;
-    long bookerId;
-    Status status;
+    private long bookingId;
+    private LocalDate startDate;
+    private LocalDate finishDate;
+    private long itemId;
+    private long bookerId;
+    private Status status;
 }

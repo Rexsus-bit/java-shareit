@@ -11,9 +11,9 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
-    long id;
-    String name;
+    private long id;
+    private String name;
     @NotBlank
     @Email
-    String email;
+    private String email;
 }

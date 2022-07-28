@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ItemRequest {
-    long id;
-    String description;
-    long requestorId;
-    LocalDateTime created;
+    private long id;
+    private String description;
+    private long requestorId;
+    private LocalDateTime created;
 }
