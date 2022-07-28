@@ -21,12 +21,11 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final UserInMemoryRepository userRepository;
 
-    public ItemDTO create(Item item, long userId) {
+    public Item create(Item item, long userId) {
         item.setOwnerId(userId);
         itemValidation(item);
-
         itemRepository.create(item);
-        return mapper.toItemDto(item);
+        return item;
     }
 
     private void itemValidation(Item item) {
@@ -34,17 +33,16 @@ public class ItemService {
         throw new NotExcistedUserException();
     }
 
-    public ItemDTO update(Item item, long userId, long itemId) {
-        return  mapper.toItemDto(itemRepository.update(item, userId, itemId));
-
+    public Item update(Item item, long userId, long itemId) {
+        return itemRepository.update(item, userId, itemId);
     }
 
-    public ItemDTO getItem(long itemId) {
-        return mapper.toItemDto(itemRepository.getItem(itemId));
+    public Item getItem(long itemId) {
+        return itemRepository.getItem(itemId);
     }
 
-    public List<ItemDTO> getAllUserItems(long userId) {
-        return itemRepository.getAllUserItems(userId).stream().map(Mapper::toItemDto).collect(Collectors.toList());
+    public List<Item> getAllUserItems(long userId) {
+        return itemRepository.getAllUserItems(userId).stream().collect(Collectors.toList());
     }
 
     public List<Item> searchAvailableItems(String text) {

@@ -15,10 +15,10 @@ public class UserService {
     private final Mapper mapper;
     private final UserInMemoryRepository userRepository;
 
-    public UserDTO create(User user) {
+    public User create(User user) {
         userValidation(user);
         userRepository.create(user);
-        return mapper.toUserDto(user);
+        return user;
     }
 
     private void userValidation(User user) {
@@ -28,43 +28,22 @@ public class UserService {
         );
     }
 
-    public UserDTO update(User user, long userId) {
+    public User update(User user, long userId) {
         userValidation(user);
-        return mapper.toUserDto(userRepository.update(user, userId));
+        return userRepository.update(user, userId);
     }
 
-    public UserDTO get(long userId) {
-        return mapper.toUserDto(userRepository.get(userId));
+    public User get(long userId) {
+        return userRepository.get(userId);
     }
 
-    public List<UserDTO> getAll() {
-        return userRepository.getAll().stream().map(Mapper::toUserDto).collect(Collectors.toList());
+    public List<User> getAll() {
+        return userRepository.getAll().stream().collect(Collectors.toList());
     }
-    public UserDTO delete(long userId) {
-        return mapper.toUserDto(userRepository.delete(userId));
+    public User delete(long userId) {
+        return userRepository.delete(userId);
     }
 
-
-//
-//    public ItemDTO update(Item item, long userId, long itemId) {
-//        return  mapper.toItemDto(userRepository.update(item, userId, itemId));
-//
-//
-//
-//
-//    }
-//
-//    public ItemDTO getItem(long itemId) {
-//        return mapper.toItemDto(userRepository.getItem(itemId));
-//    }
-//
-//    public void getUserItems(long userId) {
-//    }
-//
-//    public List<Item> searchAvailableItems(String text) {
-//        return null;
-//    }
-//}
 
 
 }
