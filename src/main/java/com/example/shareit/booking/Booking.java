@@ -16,5 +16,4 @@ public class Booking {
     long itemId;
     long bookerId;
     Status status;
-
 }
