@@ -37,12 +37,6 @@ public class ItemController {
         return itemService.getAllUserItems(userId);
     }
 
-//    @DeleteMapping //TODO ADDITIONAL
-//    Item delete() {
-//        itemService.getDelleteUser(itemId, userId);
-//        return null;
-//    }
-
     @GetMapping("/search")
     List<Item> search(@RequestParam String text){
         return itemService.searchAvailableItems(text);
