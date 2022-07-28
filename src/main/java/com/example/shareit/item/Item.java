@@ -1,17 +1,27 @@
 package com.example.shareit.item;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+
 @Data
-@AllArgsConstructor
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Item {
-    long id;
-    String name;
-    String description;
-    boolean available;
-    long ownerId;
-    long request;
+    @EqualsAndHashCode.Include
+    private Long id;
+    @NotBlank
+    private String name;
+    @NotBlank
+    private String description;
+    @NotNull
+    private Boolean available;
+    private Long ownerId;
+    private Long request;
+
 }
