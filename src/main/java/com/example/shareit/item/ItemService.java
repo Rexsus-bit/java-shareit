@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemService {
 
-
-    private final Mapper mapper;
     private final ItemRepository itemRepository;
     private final UserInMemoryRepository userRepository;
 
