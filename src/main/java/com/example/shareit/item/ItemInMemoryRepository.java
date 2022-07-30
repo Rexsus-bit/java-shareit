@@ -47,19 +47,14 @@ public class ItemInMemoryRepository implements ItemRepository {
         Item itemToUpdate = getItem(itemId);
         long ownerId = itemToUpdate.getOwnerId();
         if (ownerId != userId) throw new WrongUserException();
-        try {
-            for (Field field : Item.class.getDeclaredFields()) {
-                if (!Modifier.isStatic(field.getModifiers())) {
-                    field.setAccessible(true);
-                    Object val = field.get(item);
-                    if (val != null) {
-                        field.set(itemToUpdate, val);
-                    }
-                }
-            }
-//            System.out.println(obj1);
-        } catch (IllegalAccessException e) {
-            // Handle exception
+        if (item.getName() != null) {
+            itemToUpdate.setName(item.getName());
+        }
+        if (item.getDescription() != null) {
+            itemToUpdate.setDescription(item.getDescription());
+        }
+        if (item.getAvailable() != null) {
+            itemToUpdate.setAvailable(item.getAvailable());
         }
         return itemToUpdate;
     }
@@ -71,7 +66,7 @@ public class ItemInMemoryRepository implements ItemRepository {
 
     @Override
     public List<Item> getAllUserItems(long userId) {
-        return  items.get(userId);
+        return items.get(userId);
     }
 
     @Override

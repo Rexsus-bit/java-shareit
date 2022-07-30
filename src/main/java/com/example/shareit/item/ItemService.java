@@ -6,10 +6,7 @@ import com.example.shareit.user.UserInMemoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,8 +26,9 @@ public class ItemService {
     }
 
     private void itemValidation(Item item) {
-        if ( !userRepository.getUsers().containsKey(item.getOwnerId()))
-        throw new NotExistedUserException();
+        if (!userRepository.getUsers().containsKey(item.getOwnerId())) {
+            throw new NotExistedUserException();
+        }
     }
 
     public Item update(Item item, long userId, long itemId) {
@@ -42,7 +40,7 @@ public class ItemService {
     }
 
     public List<Item> getAllUserItems(long userId) {
-        return itemRepository.getAllUserItems(userId).stream().collect(Collectors.toList());
+        return new ArrayList<>(itemRepository.getAllUserItems(userId));
     }
 
     public List<Item> searchAvailableItems(String text) {
@@ -51,10 +49,14 @@ public class ItemService {
         return itemList.stream().filter(a -> {
             List<String> queryWords = Arrays.stream(text.split("\\s")).map(String::toLowerCase).collect(Collectors.toList());
             if (text.isBlank()) return false;
-            for (String queryWord : queryWords) {
-                return (a.getName().toLowerCase().contains(queryWord) || a.getDescription().toLowerCase().contains(queryWord)) && a.getAvailable();
-            }
-            return false;
+            return checkQuery(a, queryWords);
         }).collect(Collectors.toList());
+    }
+
+    private boolean checkQuery(Item a, List<String> queryWords) {
+        for (String queryWord : queryWords) {
+            return (a.getName().toLowerCase().contains(queryWord) || a.getDescription().toLowerCase().contains(queryWord)) && a.getAvailable();
+        }
+        return false;
     }
 }
