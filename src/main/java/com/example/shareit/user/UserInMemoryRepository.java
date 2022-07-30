@@ -3,8 +3,6 @@ package com.example.shareit.user;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.*;
 
 @Component
@@ -20,9 +18,9 @@ public class UserInMemoryRepository {
     }
 
     public void create(User user) {
-    long id = getId();
-    user.setId(id);
-    users.put(id, user);
+        long id = getId();
+        user.setId(id);
+        users.put(id, user);
     }
 
     private long getId() {
@@ -30,17 +28,13 @@ public class UserInMemoryRepository {
     }
 
     public User update(User user, long userId) throws IllegalAccessException {
-
-        User userToUpdate =  users.get(userId);
-            for (Field field : User.class.getDeclaredFields()) {
-                if (!Modifier.isStatic(field.getModifiers())) {
-                    field.setAccessible(true);
-                    Object val = field.get(user);
-                    if (val != null) {
-                        field.set(userToUpdate, val);
-                    }
-                }
-            }
+        User userToUpdate = users.get(userId);
+        if (user.getName() != null) {
+            userToUpdate.setName(user.getName());
+        }
+        if (user.getEmail() != null) {
+            userToUpdate.setEmail(user.getEmail());
+        }
         return userToUpdate;
     }
 
@@ -51,9 +45,9 @@ public class UserInMemoryRepository {
     public Collection<User> getAll() {
         return users.values();
     }
+
     public User delete(long userId) {
         return users.remove(userId);
     }
-
 
 }

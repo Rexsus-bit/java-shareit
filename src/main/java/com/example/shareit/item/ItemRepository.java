@@ -12,9 +12,8 @@ public interface ItemRepository {
 
     Item getItem(long itemId);
 
-   Collection<Item> getAllUserItems(long userId);
+    Collection<Item> getAllUserItems(long userId);
 
     Map<Long, List<Item>> getAllItems();
 
-    List<Item> searchAvailableItems(String text);
 }

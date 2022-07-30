@@ -1,6 +1,5 @@
 package com.example.shareit.user;
 
-import com.example.shareit.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final Mapper mapper;
     private final UserInMemoryRepository userRepository;
 
     public User create(User user) {
@@ -23,8 +21,10 @@ public class UserService {
 
     private void userValidation(User user) {
         userRepository.getUsers().values().forEach(
-                user1 -> { if (user1.getEmail().equals(user.getEmail()))
-                    throw new ValidationException();}
+                user1 -> {
+                    if (user1.getEmail().equals(user.getEmail()))
+                        throw new ValidationException();
+                }
         );
     }
 
@@ -38,12 +38,13 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return userRepository.getAll().stream().collect(Collectors.toList());
+        return userRepository.getAll().stream()
+                .collect(Collectors.toList());
     }
+
     public User delete(long userId) {
         return userRepository.delete(userId);
     }
-
 
 
 }
