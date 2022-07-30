@@ -15,7 +15,5 @@ import javax.validation.constraints.NotBlank;
 public class User {
     private Long id;
     private String name;
-    @NotBlank
-    @Email
     private String email;
 }
