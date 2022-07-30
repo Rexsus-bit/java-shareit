@@ -25,7 +25,7 @@ public class ItemInMemoryRepository implements ItemRepository {
                 .mapToLong(Item::getId)
                 .max()
                 .orElse(0);
-        return lastId + 1;
+        return ++lastId;
     }
 
     @Override
@@ -47,7 +47,6 @@ public class ItemInMemoryRepository implements ItemRepository {
         Item itemToUpdate = getItem(itemId);
         long ownerId = itemToUpdate.getOwnerId();
         if (ownerId != userId) throw new WrongUserException();
-
         try {
             for (Field field : Item.class.getDeclaredFields()) {
                 if (!Modifier.isStatic(field.getModifiers())) {
@@ -67,15 +66,12 @@ public class ItemInMemoryRepository implements ItemRepository {
 
     @Override
     public Item getItem(long itemId) {
-//TODO подумать над оптимизацией
-        List<Item> s = items.values().stream().flatMap(a -> a.stream()).collect(Collectors.toList());
-        return s.stream().filter(a -> a.getId().equals(itemId)).findFirst().get();
+        return items.values().stream().flatMap(Collection::stream).filter(oneOfItems -> oneOfItems.getId().equals(itemId)).findFirst().get();
     }
 
     @Override
     public List<Item> getAllUserItems(long userId) {
         return  items.get(userId);
-//        return items.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 
     @Override
