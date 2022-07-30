@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final Mapper mapper;
     private final UserInMemoryRepository userRepository;
 
     public User create(User user) {
@@ -38,7 +37,8 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return userRepository.getAll().stream().collect(Collectors.toList());
+        return userRepository.getAll().stream()
+                .collect(Collectors.toList());
     }
     public User delete(long userId) {
         return userRepository.delete(userId);

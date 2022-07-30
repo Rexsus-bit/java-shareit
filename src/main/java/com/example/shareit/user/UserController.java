@@ -30,7 +30,9 @@ public class UserController {
 
     @GetMapping
     public List<UserDTO> getAll() {
-        return userService.getAll().stream().map(Mapper::toUserDto).collect(Collectors.toList());
+        return userService.getAll().stream()
+                .map(Mapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     @PatchMapping("{userId}")

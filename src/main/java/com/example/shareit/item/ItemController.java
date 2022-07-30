@@ -38,13 +38,17 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDTO> getAllUserItem(@RequestHeader("X-Sharer-User-Id") long userId) {
-        return itemService.getAllUserItems(userId).stream().map(Mapper::toItemDto)
+        return itemService.getAllUserItems(userId)
+                .stream()
+                .map(Mapper::toItemDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/search")
     public List<ItemDTO> search(@RequestParam String text) {
-        return itemService.searchAvailableItems(text).stream().map(Mapper::toItemDto)
+        return itemService.searchAvailableItems(text)
+                .stream()
+                .map(Mapper::toItemDto)
                 .collect(Collectors.toList());
     }
 

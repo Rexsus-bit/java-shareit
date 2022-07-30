@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -16,7 +13,6 @@ public class ItemInMemoryRepository implements ItemRepository {
 
     @Getter
     private Map<Long, List<Item>> items;
-
 
     private long getId() {
         long lastId = items.values()
@@ -61,7 +57,10 @@ public class ItemInMemoryRepository implements ItemRepository {
 
     @Override
     public Item getItem(long itemId) {
-        return items.values().stream().flatMap(Collection::stream).filter(oneOfItems -> oneOfItems.getId().equals(itemId)).findFirst().get();
+        return items.values().stream()
+                .flatMap(Collection::stream)
+                .filter(oneOfItems -> oneOfItems.getId().equals(itemId))
+                .findFirst().get();
     }
 
     @Override

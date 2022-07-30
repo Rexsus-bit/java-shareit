@@ -45,9 +45,13 @@ public class ItemService {
 
     public List<Item> searchAvailableItems(String text) {
         Map<Long, List<Item>> itemsMap = itemRepository.getAllItems();
-        List<Item> itemList = itemsMap.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
+        List<Item> itemList = itemsMap.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
         return itemList.stream().filter(a -> {
-            List<String> queryWords = Arrays.stream(text.split("\\s")).map(String::toLowerCase).collect(Collectors.toList());
+            List<String> queryWords = Arrays.stream(text.split("\\s"))
+                    .map(String::toLowerCase)
+                    .collect(Collectors.toList());
             if (text.isBlank()) return false;
             return checkQuery(a, queryWords);
         }).collect(Collectors.toList());
