@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Mapper {
 
-    public static UserDTO  toUserDto (User user) {
+    public static UserDTO toUserDto(User user) {
         return UserDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -17,14 +17,15 @@ public class Mapper {
                 .build();
     }
 
-    public static User toUser (UserDTO userDto) {
+    public static User toUser(UserDTO userDto) {
         return User.builder()
                 .id(userDto.getId())
-                .name( userDto.getName())
+                .name(userDto.getName())
                 .email(userDto.getEmail())
                 .build();
     }
-    public static ItemDTO toItemDto (Item item) {
+
+    public static ItemDTO toItemDto(Item item) {
         return ItemDTO.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -33,7 +34,7 @@ public class Mapper {
                 .build();
     }
 
-    public static Item toItem (ItemDTO itemDTO) {
+    public static Item toItem(ItemDTO itemDTO) {
         return Item.builder()
                 .id(itemDTO.getId())
                 .name(itemDTO.getName())

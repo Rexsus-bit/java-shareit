@@ -21,8 +21,10 @@ public class UserService {
 
     private void userValidation(User user) {
         userRepository.getUsers().values().forEach(
-                user1 -> { if (user1.getEmail().equals(user.getEmail()))
-                    throw new ValidationException();}
+                user1 -> {
+                    if (user1.getEmail().equals(user.getEmail()))
+                        throw new ValidationException();
+                }
         );
     }
 
@@ -39,10 +41,10 @@ public class UserService {
         return userRepository.getAll().stream()
                 .collect(Collectors.toList());
     }
+
     public User delete(long userId) {
         return userRepository.delete(userId);
     }
-
 
 
 }

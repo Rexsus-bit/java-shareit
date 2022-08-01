@@ -50,5 +50,4 @@ public class UserInMemoryRepository {
         return users.remove(userId);
     }
 
-
 }
