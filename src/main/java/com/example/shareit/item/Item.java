@@ -1,12 +1,8 @@
 package com.example.shareit.item;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 
 @Data

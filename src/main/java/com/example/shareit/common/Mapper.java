@@ -6,8 +6,6 @@ import com.example.shareit.user.User;
 import com.example.shareit.user.UserDTO;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotBlank;
-
 @Component
 public class Mapper {
 

@@ -1,6 +1,5 @@
 package com.example.shareit.user;
 
-import com.example.shareit.common.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

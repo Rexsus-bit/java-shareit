@@ -1,6 +1,5 @@
 package com.example.shareit.item;
 
-import com.example.shareit.common.Mapper;
 import com.example.shareit.exceptions.NotExistedUserException;
 import com.example.shareit.user.UserInMemoryRepository;
 import lombok.RequiredArgsConstructor;
