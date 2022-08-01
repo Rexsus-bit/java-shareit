@@ -74,9 +74,5 @@ public class ItemInMemoryRepository implements ItemRepository {
 
     }
 
-    @Override
-    public List<Item> searchAvailableItems(String text) {
-        return null;
-    }
 }
 
