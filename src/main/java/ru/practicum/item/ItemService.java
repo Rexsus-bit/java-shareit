@@ -2,11 +2,9 @@ package ru.practicum.item;
 
 import ru.practicum.exceptions.NotExistedUserException;
 import ru.practicum.exceptions.WrongUserException;
-import ru.practicum.user.User;
-import ru.practicum.user.UserInMemoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.user.UserJPARepository;
+import ru.practicum.user.UserJpaRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +14,7 @@ import java.util.stream.Collectors;
 public class ItemService {
 
     private final ItemJpaRepository itemRepository;
-    private final UserJPARepository userRepository;
+    private final UserJpaRepository userRepository;
 
     public Item create(Item item, long userId) {
         item.setOwnerId(userId);

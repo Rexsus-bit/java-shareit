@@ -2,9 +2,7 @@ package ru.practicum.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.exceptions.NotExistedUserException;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +12,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserInMemoryRepository userRepository;
-    private final UserJPARepository repository;
+    private final UserJpaRepository repository;
 
     public User create(User user) {
         userValidation(user);
