@@ -1,12 +1,9 @@
 package ru.practicum.booking;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import javax.validation.constraints.FutureOrPresent;
 import java.time.LocalDateTime;
 
 @Data

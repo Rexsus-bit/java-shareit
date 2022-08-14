@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.exceptions.NotExistedItemException;
-import ru.practicum.exceptions.NotExistedUserException;
 
 import java.util.List;
 import java.util.stream.Collectors;

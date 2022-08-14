@@ -10,7 +10,6 @@ import ru.practicum.item.ItemJpaRepository;
 import ru.practicum.user.UserJpaRepository;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 
 @Service
