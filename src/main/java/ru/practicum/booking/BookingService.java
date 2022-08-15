@@ -9,28 +9,31 @@ import ru.practicum.exceptions.UnavailableItemException;
 import ru.practicum.item.ItemJpaRepository;
 import ru.practicum.user.UserJpaRepository;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 public class BookingService {
-
+    final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private final BookingJpaRepository bookingRepository;
     private final ItemJpaRepository itemRepository;
     private final UserJpaRepository userRepository;
 
-    public Booking create(@Valid Booking booking) {
-        LocalDateTime CURRENT_TIME = LocalDateTime.now();
+    public Booking create(@Valid Booking booking, long userId) {
+//        LocalDateTime CURRENT_TIME
 
         if (booking.getStart().isBefore(CURRENT_TIME)
                 || booking.getEnd().isBefore(CURRENT_TIME))
             throw new TimeValidationException();
-        if (!itemRepository.existsById(booking.getItemId())) throw new NotExistedItemException();
-        if (!userRepository.existsById(booking.getBookerId())) throw new NotExistedUserException();
-        if (!itemRepository.getById(booking.getItemId()).getAvailable()) throw new UnavailableItemException();
-
-
+        if (booking.getBookedItem() == null) throw new NotExistedItemException();
+        if (!booking.getBookedItem().getAvailable()) throw new UnavailableItemException();
+       try{
+           booking.setBooker(userRepository.getById(userId));
+       } catch (EntityNotFoundException e){
+           throw new NotExistedUserException();
+       }
         return bookingRepository.save(booking);
     }
 
