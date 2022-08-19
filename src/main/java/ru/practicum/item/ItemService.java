@@ -1,11 +1,17 @@
 package ru.practicum.item;
 
+import ru.practicum.booking.Booking;
+import ru.practicum.booking.BookingJpaRepository;
+import ru.practicum.booking.BookingLinksDTO;
+import ru.practicum.common.Mapper;
+import ru.practicum.exceptions.NotExistedItemException;
 import ru.practicum.exceptions.NotExistedUserException;
 import ru.practicum.exceptions.WrongUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.user.UserJpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,7 +20,9 @@ import java.util.stream.Collectors;
 public class ItemService {
 
     private final ItemJpaRepository itemRepository;
+    private final BookingJpaRepository bookingRepository;
     private final UserJpaRepository userRepository;
+
 
     public Item create(Item item, long userId) {
         item.setOwnerId(userId);
@@ -44,8 +52,24 @@ public class ItemService {
         return itemRepository.save(itemToUpdate);
     }
 
-    public Item getItem(long itemId) {
-        return itemRepository.getById(itemId);
+    public ItemDTO getItem(long itemId, long userId) {
+        LocalDateTime CURRENT_TIME = LocalDateTime.now();
+        Item item = itemRepository.findById(itemId).orElseThrow(NotExistedItemException::new);
+        ItemDTO itemDTO = Mapper.toItemDto(item);
+
+        if (userId == item.getOwnerId()){
+            List<Booking> bookingsInPast = bookingRepository.
+                    findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId,CURRENT_TIME);
+
+            List<Booking> bookingsInFuture = bookingRepository.
+                    findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId,CURRENT_TIME);
+            if (bookingsInPast.size() > 0) itemDTO.setLastBooking(new BookingLinksDTO(bookingsInPast.get(0).getId(),bookingsInPast.get(0).getBooker().getId()));
+            if (bookingsInFuture.size() > 0) itemDTO.setNextBooking(new BookingLinksDTO(bookingsInFuture.get(0).getId(),bookingsInFuture.get(0).getBooker().getId()));
+        }
+
+
+
+        return itemDTO;
     }
 
     public List<Item> getAllUserItems(long userId) {
@@ -53,14 +77,7 @@ public class ItemService {
     }
 
     public List<Item> searchAvailableItems(String text) {
-//        List<Item> itemList = itemRepository.findAll();
-//        return itemList.stream().filter(a -> {
-//            List<String> queryWords = Arrays.stream(text.split("\\s"))
-//                    .map(String::toLowerCase)
-//                    .collect(Collectors.toList());
-//            if (text.isBlank()) return false;
-//            return checkQuery(a, queryWords);
-//        }).collect(Collectors.toList());
+        if (text.isBlank()) return new ArrayList<>();
         return itemRepository.searchAvailableItems(text);
     }
 

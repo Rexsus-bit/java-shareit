@@ -24,11 +24,10 @@ public class Booking {
     private LocalDateTime start;
     @Column(name = "end_date")
     private LocalDateTime end;
-
-    @ManyToOne
+    @ManyToOne/*(fetch = FetchType.EAGER)*/
     @JoinColumn(name = "item_id")
-    private Item bookedItem;
-    @ManyToOne
+    private Item item;
+    @ManyToOne/*(fetch = FetchType.EAGER)*/
     @JoinColumn(name = "booker_id")
     private User booker;
     @Column(name = "status")
@@ -36,5 +35,14 @@ public class Booking {
     private Status status;
 
     public Booking() {
+    }
+
+    public Booking(Long id, LocalDateTime start, LocalDateTime end, Item item, User booker, Status status) {
+        this.id = id;
+        this.start = start;
+        this.end = end;
+        this.item = item;
+        this.booker = booker;
+        this.status = status;
     }
 }

@@ -2,23 +2,27 @@ package ru.practicum.booking;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 @Builder
-@Getter
-@Setter
+@Data
 public class BookingDTO {
     private Long id;
     private LocalDateTime start;
     private LocalDateTime end;
-    private Long ItemId;
+    private Long itemId;
     private Long bookerId;
-    private Status status;
+    private boolean available;
 
     public BookingDTO() {
     }
 
-
+    public BookingDTO(Long id, LocalDateTime start, LocalDateTime end, Long itemId, Long bookerId, Boolean available) {
+        this.id = id;
+        this.start = start;
+        this.end = end;
+        this.itemId = itemId;
+        this.bookerId = bookerId;
+        this.available = available;
+    }
 }

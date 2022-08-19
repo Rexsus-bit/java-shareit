@@ -7,6 +7,7 @@ import ru.practicum.booking.BookingJpaRepository;
 import ru.practicum.booking.Status;
 import ru.practicum.exceptions.NotExistedItemException;
 import ru.practicum.exceptions.NotExistedUserException;
+import ru.practicum.exceptions.UnavailableItemException;
 import ru.practicum.item.Item;
 import ru.practicum.item.ItemDTO;
 import ru.practicum.item.ItemJpaRepository;
@@ -14,8 +15,6 @@ import ru.practicum.user.User;
 import ru.practicum.user.UserDTO;
 import org.springframework.stereotype.Component;
 import ru.practicum.user.UserJpaRepository;
-
-import javax.persistence.EntityNotFoundException;
 
 @Component
 @AllArgsConstructor
@@ -61,20 +60,34 @@ public class Mapper {
 
     public Booking toBooking(BookingDTO bookingDTO) {
         Item item;
-              try {
-                  item = itemRepository.getById(bookingDTO.getItemId());
-              } catch (EntityNotFoundException e) {
-                  throw new NotExistedItemException();
-              }
+        User booker;
 
+        if (!itemRepository.existsById(bookingDTO.getItemId()))  throw new NotExistedItemException();
+        item = itemRepository.getById(bookingDTO.getItemId());
 
+        if (!userRepository.existsById(bookingDTO.getBookerId())) throw new NotExistedUserException();
+        booker = userRepository.getById(bookingDTO.getBookerId());
 
-        return Booking.builder()
+        if (!item.getAvailable()){
+            throw new UnavailableItemException();
+        }
+
+        return Booking.builder().id(null)
                 .start(bookingDTO.getStart())
                 .end(bookingDTO.getEnd())
-                .bookedItem(item)
-                .booker()
+                .item(item)
+                .booker(booker)
                 .status(Status.WAITING)
+                .build();
+    }
+
+    public BookingDTO toBookingDto(Booking booking) {
+        return BookingDTO.builder()
+                .id(booking.getId())
+                .start(booking.getStart())
+                .end(booking.getEnd())
+                .itemId(booking.getItem().getId())
+                .bookerId(booking.getBooker().getId())
                 .build();
     }
 

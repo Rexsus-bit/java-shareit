@@ -35,12 +35,12 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ItemDTO getItem(@PathVariable("id") long itemId) {
-        try {
-            return Mapper.toItemDto(itemService.getItem(itemId));
-        } catch (EntityNotFoundException e) {
-            throw new NotExistedItemException();
-        }
+    public ItemDTO getItem(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable("id") long itemId) {
+//        try {
+            return itemService.getItem(itemId, userId);
+//        } catch (EntityNotFoundException e) {
+//            throw new NotExistedItemException();
+//        }
     }
 
     @GetMapping
