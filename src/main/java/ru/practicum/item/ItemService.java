@@ -68,15 +68,17 @@ public class ItemService {
             List<Booking> bookingsInPast = bookingRepository
                     .findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId, currentTime);
 
-            List<Booking> bookingsInFuture = bookingRepository.
-                    findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, currentTime);
+            List<Booking> bookingsInFuture = bookingRepository
+                    .findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, currentTime);
             if (bookingsInPast.size() > 0)
-                itemDTO.setLastBooking(new BookingLinksDTO(bookingsInPast.get(0).getId(), bookingsInPast.get(0).getBooker().getId()));
+                itemDTO.setLastBooking(new BookingLinksDTO(bookingsInPast.get(0).getId()
+                        , bookingsInPast.get(0).getBooker().getId()));
             if (bookingsInFuture.size() > 0)
                 itemDTO.setNextBooking(new BookingLinksDTO(bookingsInFuture.get(0).getId(), bookingsInFuture.get(0).getBooker().getId()));
         }
         List<Comment> comments = commentRepository.findAllByItemId(itemId);
-        itemDTO.setComments(new HashSet<>(comments.stream().map(mapper::toCommentDTO).collect(Collectors.toList())));
+        itemDTO.setComments(new HashSet<>(comments.stream().map(mapper::toCommentDTO)
+                .collect(Collectors.toList())));
 
         return itemDTO;
     }
@@ -86,10 +88,10 @@ public class ItemService {
         List<ItemDTO> itemsDTO = itemRepository.findAll().stream().filter(a -> a.getOwnerId() == userId).map(mapper::toItemDto).collect(Collectors.toList());
         itemsDTO.forEach((a) -> {
             Long itemId = a.getId();
-            List<Booking> bookingsInPast = bookingRepository.
-                    findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId, currentTime);
-            List<Booking> bookingsInFuture = bookingRepository.
-                    findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, currentTime);
+            List<Booking> bookingsInPast = bookingRepository
+                    .findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId, currentTime);
+            List<Booking> bookingsInFuture = bookingRepository
+                    .findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, currentTime);
             if (bookingsInPast.size() > 0)
                 a.setLastBooking(new BookingLinksDTO(bookingsInPast.get(0).getId(), bookingsInPast.get(0).getBooker().getId()));
             if (bookingsInFuture.size() > 0)
@@ -104,11 +106,9 @@ public class ItemService {
     }
 
     public CommentDTO addComment(long userId, Comment comment, long itemId) {
-        List<Booking> bookings = bookingRepository.findAllByBookerIdAndItemIdAndStatusOrderByStartDesc
-                (userId, itemId, Status.APPROVED);
+        List<Booking> bookings = bookingRepository.findAllByBookerIdAndItemIdAndStatusOrderByStartDesc(userId, itemId, Status.APPROVED);
         if (bookings.size() == 0) throw new ValidationException();
-        boolean hasBeenAlreadyRented = bookings.stream().anyMatch(a -> a.getEnd().isBefore
-                (LocalDateTime.now()));
+        boolean hasBeenAlreadyRented = bookings.stream().anyMatch(a -> a.getEnd().isBefore(LocalDateTime.now()));
         if (comment.getText().isBlank() || !hasBeenAlreadyRented) throw new ValidationException();
         comment.setAuthor(userRepository.findById(userId).orElseThrow(NotExistedUserException::new));
         comment.setItem(itemRepository.findById(itemId).orElseThrow(NotExistedItemException::new));
