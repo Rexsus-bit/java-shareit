@@ -1,6 +1,7 @@
 package ru.practicum.common;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.practicum.booking.Booking;
 import ru.practicum.booking.BookingDTO;
 import ru.practicum.booking.Status;
@@ -10,7 +11,6 @@ import ru.practicum.exceptions.UnavailableItemException;
 import ru.practicum.item.*;
 import ru.practicum.user.User;
 import ru.practicum.user.UserDTO;
-import org.springframework.stereotype.Component;
 import ru.practicum.user.UserJpaRepository;
 
 @Component
@@ -20,7 +20,7 @@ public class Mapper {
     private final ItemJpaRepository itemRepository;
     private final UserJpaRepository userRepository;
 
-    public static UserDTO toUserDto(User user){
+    public static UserDTO toUserDto(User user) {
         return UserDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -36,7 +36,7 @@ public class Mapper {
                 .build();
     }
 
-    public ItemDTO toItemDto(Item item){
+    public ItemDTO toItemDto(Item item) {
         return ItemDTO.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -45,7 +45,7 @@ public class Mapper {
                 .build();
     }
 
-    public static Item toItem(ItemDTO itemDTO){
+    public static Item toItem(ItemDTO itemDTO) {
         return Item.builder()
                 .id(itemDTO.getId())
                 .name(itemDTO.getName())
@@ -54,17 +54,17 @@ public class Mapper {
                 .build();
     }
 
-    public Booking toBooking(BookingDTO bookingDTO){
+    public Booking toBooking(BookingDTO bookingDTO) {
         Item item;
         User booker;
 
-        if (!itemRepository.existsById(bookingDTO.getItemId()))  throw new NotExistedItemException();
+        if (!itemRepository.existsById(bookingDTO.getItemId())) throw new NotExistedItemException();
         item = itemRepository.getById(bookingDTO.getItemId());
 
         if (!userRepository.existsById(bookingDTO.getBookerId())) throw new NotExistedUserException();
         booker = userRepository.getById(bookingDTO.getBookerId());
 
-        if (!item.getAvailable()){
+        if (!item.getAvailable()) {
             throw new UnavailableItemException();
         }
 
@@ -77,7 +77,7 @@ public class Mapper {
                 .build();
     }
 
-    public BookingDTO toBookingDto(Booking booking){
+    public BookingDTO toBookingDto(Booking booking) {
         return BookingDTO.builder()
                 .id(booking.getId())
                 .start(booking.getStart())
@@ -87,7 +87,7 @@ public class Mapper {
                 .build();
     }
 
-    public CommentDTO toCommentDTO(Comment comment){
+    public CommentDTO toCommentDTO(Comment comment) {
         return CommentDTO.builder()
                 .id(comment.getId())
                 .text(comment.getText())
