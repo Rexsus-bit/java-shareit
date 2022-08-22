@@ -7,13 +7,11 @@ import ru.practicum.exceptions.AccessErrorException;
 import ru.practicum.exceptions.NotExistedBookingException;
 import ru.practicum.exceptions.NotExistedUserException;
 import ru.practicum.exceptions.ValidationException;
-import ru.practicum.item.ItemJpaRepository;
 import ru.practicum.user.UserJpaRepository;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,12 +51,12 @@ public class BookingService {
     }
 
     public Booking getBookingById(long userId, long bookingId) {
-            Booking booking = bookingRepository.findById(bookingId).orElseThrow(NotExistedBookingException::new);
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(NotExistedBookingException::new);
 
-            if(userId != booking.getBooker().getId() && userId != booking.getItem().getOwnerId()) {
-                throw new AccessErrorException();
-            }
-            return booking;
+        if (userId != booking.getBooker().getId() && userId != booking.getItem().getOwnerId()) {
+            throw new AccessErrorException();
+        }
+        return booking;
     }
 
     public List<Booking> getAllBookings(long userId, State state) {
@@ -67,18 +65,23 @@ public class BookingService {
         switch (state) {
 
             case ALL:
-                return  bookingRepository.findAllByBookerIdOrderByStartDesc(userId);
+                return bookingRepository.findAllByBookerIdOrderByStartDesc(userId);
 
             case PAST:
-                return bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(userId, LocalDateTime.now());
+                return bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc
+                        (userId, LocalDateTime.now());
+
             case FUTURE:
-                return bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(userId, LocalDateTime.now());
+                return bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc
+                        (userId, LocalDateTime.now());
 
             case CURRENT:
-                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, LocalDateTime.now(), LocalDateTime.now());
+                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc
+                        (userId, LocalDateTime.now(), LocalDateTime.now());
 
             case WAITING:
                 return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
+
             case REJECTED:
                 return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
         }
