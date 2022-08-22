@@ -38,7 +38,7 @@ public class ItemService {
     }
 
     private void itemValidation(Item item) {
-        if (userRepository.findAll().stream().noneMatch(a -> a.getId() == item.getOwnerId())) {
+        if (userRepository.findAll().stream().noneMatch(a -> a.getId().equals(item.getOwnerId()))) {
             throw new NotExistedUserException();
         }
     }
