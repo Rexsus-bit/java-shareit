@@ -99,4 +99,13 @@ public class Mapper {
                 .build();
     }
 
+    public CommentDTO toCommentDTO(Comment comment){
+        return CommentDTO.builder()
+                .id(comment.getId())
+                .text(comment.getText())
+                .authorName(comment.getAuthor().getName())
+                .created(true)
+                .build();
+    }
+
 }

@@ -3,7 +3,6 @@ package ru.practicum.item;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.booking.Booking;
 import ru.practicum.booking.BookingLinksDTO;
 
 import javax.validation.constraints.NotBlank;
@@ -23,5 +22,5 @@ public class ItemDTO {
     private Boolean available;
     private BookingLinksDTO lastBooking;
     private BookingLinksDTO nextBooking;
-    private Set<Comment> comments;
+    private Set <CommentDTO> comments;
 }

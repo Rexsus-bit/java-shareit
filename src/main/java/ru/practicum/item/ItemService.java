@@ -3,11 +3,9 @@ package ru.practicum.item;
 import ru.practicum.booking.Booking;
 import ru.practicum.booking.BookingJpaRepository;
 import ru.practicum.booking.BookingLinksDTO;
+import ru.practicum.booking.Status;
 import ru.practicum.common.Mapper;
-import ru.practicum.exceptions.NotExistedBookingException;
-import ru.practicum.exceptions.NotExistedItemException;
-import ru.practicum.exceptions.NotExistedUserException;
-import ru.practicum.exceptions.WrongUserException;
+import ru.practicum.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.user.UserJpaRepository;
@@ -26,7 +24,6 @@ public class ItemService {
     private final UserJpaRepository userRepository;
     private final CommentJpaRepository commentRepository;
     private final Mapper mapper;
-
 
     public Item create(Item item, long userId) {
         item.setOwnerId(userId);
@@ -70,17 +67,16 @@ public class ItemService {
             if (bookingsInPast.size() > 0) itemDTO.setLastBooking(new BookingLinksDTO(bookingsInPast.get(0).getId(),bookingsInPast.get(0).getBooker().getId()));
             if (bookingsInFuture.size() > 0) itemDTO.setNextBooking(new BookingLinksDTO(bookingsInFuture.get(0).getId(),bookingsInFuture.get(0).getBooker().getId()));
         }
-
-        List<Comment> s = commentRepository.findAll();
+        List<Comment> comments = commentRepository.findAllByItemId(itemId);
+        itemDTO.setComments(new HashSet<>(comments.stream().map(mapper::toCommentDTO).collect(Collectors.toList())));
 
         return itemDTO;
     }
 
     public List<ItemDTO> getAllUserItems(long userId) {
         LocalDateTime CURRENT_TIME = LocalDateTime.now();
-        List<ItemDTO> s = itemRepository.findAll().stream().filter(a-> a.getOwnerId() == userId).map(mapper::toItemDto).collect(Collectors.toList());
-
-        s.forEach((a) -> {
+        List<ItemDTO> itemsDTO = itemRepository.findAll().stream().filter(a-> a.getOwnerId() == userId).map(mapper::toItemDto).collect(Collectors.toList());
+        itemsDTO.forEach((a) -> {
             Long itemId = a.getId();
             List<Booking> bookingsInPast = bookingRepository.
                     findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId,CURRENT_TIME);
@@ -89,7 +85,7 @@ public class ItemService {
             if (bookingsInPast.size() > 0) a.setLastBooking(new BookingLinksDTO(bookingsInPast.get(0).getId(),bookingsInPast.get(0).getBooker().getId()));
             if (bookingsInFuture.size() > 0) a.setNextBooking(new BookingLinksDTO(bookingsInFuture.get(0).getId(),bookingsInFuture.get(0).getBooker().getId()));
         });
-        return s.stream().sorted(Comparator.comparingLong(ItemDTO::getId)).collect(Collectors.toList());
+        return itemsDTO.stream().sorted(Comparator.comparingLong(ItemDTO::getId)).collect(Collectors.toList());
     }
 
     public List<Item> searchAvailableItems(String text) {
@@ -97,16 +93,15 @@ public class ItemService {
         return itemRepository.searchAvailableItems(text);
     }
 
-    private boolean checkQuery(Item a, List<String> queryWords) {
-        for (String queryWord : queryWords) {
-            return (a.getName().toLowerCase().contains(queryWord) || a.getDescription().toLowerCase().contains(queryWord)) && a.getAvailable();
-        }
-        return false;
-    }
-
-    public Comment addComment(long userId, Comment comment, long itemId) {
+    public CommentDTO addComment(long userId, Comment comment, long itemId) {
+        List <Booking> bookings = bookingRepository.findAllByBookerIdAndItemIdAndStatusOrderByStartDesc
+                ( userId, itemId, Status.APPROVED);
+        if (bookings.size() == 0) throw new ValidationException();
+        boolean hasBeenAlreadyRented = bookings.stream().anyMatch(a-> a.getEnd().isBefore
+                (LocalDateTime.now()));
+        if (comment.getText().isBlank() || !hasBeenAlreadyRented) throw new ValidationException();
         comment.setAuthor(userRepository.findById(userId).orElseThrow(NotExistedUserException::new));
         comment.setItem(itemRepository.findById(itemId).orElseThrow(NotExistedItemException::new));
-        return commentRepository.save(comment);
+        return mapper.toCommentDTO(commentRepository.save(comment));
     }
 }
