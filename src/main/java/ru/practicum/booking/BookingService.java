@@ -6,14 +6,11 @@ import ru.practicum.exceptions.AccessErrorException;
 import ru.practicum.exceptions.NotExistedBookingException;
 import ru.practicum.exceptions.NotExistedUserException;
 import ru.practicum.exceptions.ValidationException;
-import ru.practicum.item.Item;
-import ru.practicum.item.ItemDTO;
 import ru.practicum.item.ItemJpaRepository;
 import ru.practicum.user.UserJpaRepository;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,7 +18,6 @@ import java.util.List;
 public class BookingService {
     final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private final BookingJpaRepository bookingRepository;
-    private final ItemJpaRepository itemRepository;
     private final UserJpaRepository userRepository;
 
     public Booking create(@Valid Booking booking, long userId) {
@@ -65,33 +61,44 @@ public class BookingService {
 
     public List<Booking> getAllBookings(long userId, State state) {
         if (!userRepository.existsById(userId)) throw new NotExistedUserException();
-        switch (state){
-
+        switch (state) {
             case ALL:
-        return bookingRepository.findAllByBookerIdOrderByStartDesc(userId);
-
+                return bookingRepository.findAllByBookerIdOrderByStartDesc(userId);
             case PAST:
                 return bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(userId, CURRENT_TIME);
-
             case FUTURE:
                 return bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(userId, CURRENT_TIME);
+//              return bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(userId, CURRENT_TIME);
 
             case CURRENT:
-                break;
-
+                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, CURRENT_TIME, CURRENT_TIME);
             case WAITING:
-                break;
-
+                return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
             case REJECTED:
-                break;
-
+                return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
         }
-
         return null;
     }
 
     public List<Booking> getAllOwnerBookings(long userId, State state) {
         if (!userRepository.existsById(userId)) throw new NotExistedUserException();
-       return bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId);
+
+//
+        switch (state) {
+            case ALL:
+                return bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId);
+            case PAST:
+                return bookingRepository.findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(userId, CURRENT_TIME);
+            case FUTURE:
+                return bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(userId, CURRENT_TIME);
+            case CURRENT:
+                return bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, CURRENT_TIME, CURRENT_TIME);
+            case WAITING:
+                return bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
+            case REJECTED:
+                return bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
+        }
+        return null;
+
     }
 }

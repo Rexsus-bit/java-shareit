@@ -8,21 +8,22 @@ import ru.practicum.booking.Status;
 import ru.practicum.exceptions.NotExistedItemException;
 import ru.practicum.exceptions.NotExistedUserException;
 import ru.practicum.exceptions.UnavailableItemException;
-import ru.practicum.item.Item;
-import ru.practicum.item.ItemDTO;
-import ru.practicum.item.ItemJpaRepository;
+import ru.practicum.item.*;
 import ru.practicum.user.User;
 import ru.practicum.user.UserDTO;
 import org.springframework.stereotype.Component;
 import ru.practicum.user.UserJpaRepository;
 
+import java.util.List;
+import java.util.Set;
+
 @Component
 @AllArgsConstructor
 public class Mapper {
 
-    private final BookingJpaRepository bookingRepository;
     private final ItemJpaRepository itemRepository;
     private final UserJpaRepository userRepository;
+    private final CommentJpaRepository commentRepository;
 
     public static UserDTO toUserDto(User user) {
         return UserDTO.builder()
@@ -40,12 +41,19 @@ public class Mapper {
                 .build();
     }
 
-    public static ItemDTO toItemDto(Item item) {
+    public ItemDTO toItemDto(Item item) {
+
+//            List comments = commentRepository.findAll();
+//        System.out.println(comments);
+//        if () itemDTO.setComments(comments.stream().map(Optional::get).collect(Collectors.toSet()));
+
+
         return ItemDTO.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+//                .comments(comments)
                 .build();
     }
 

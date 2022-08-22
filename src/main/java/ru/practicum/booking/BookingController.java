@@ -56,5 +56,6 @@ public class BookingController {
         Map<String,String> resp = new HashMap<>();
         resp.put("error",String.format("Unknown %s: %s", ex.getName(), ex.getValue()));
         return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+
     }
 }

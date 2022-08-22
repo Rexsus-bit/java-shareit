@@ -24,10 +24,10 @@ public class Booking {
     private LocalDateTime start;
     @Column(name = "end_date")
     private LocalDateTime end;
-    @ManyToOne/*(fetch = FetchType.EAGER)*/
+    @ManyToOne
     @JoinColumn(name = "item_id")
     private Item item;
-    @ManyToOne/*(fetch = FetchType.EAGER)*/
+    @ManyToOne
     @JoinColumn(name = "booker_id")
     private User booker;
     @Column(name = "status")

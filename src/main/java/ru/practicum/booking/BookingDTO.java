@@ -2,8 +2,11 @@ package ru.practicum.booking;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.practicum.item.Comment;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+
 @Builder
 @Data
 public class BookingDTO {
