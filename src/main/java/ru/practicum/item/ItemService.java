@@ -60,16 +60,16 @@ public class ItemService {
     }
 
     public ItemDTO getItem(long itemId, long userId) {
-        LocalDateTime CURRENT_TIME = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
         Item item = itemRepository.findById(itemId).orElseThrow(NotExistedItemException::new);
         ItemDTO itemDTO = mapper.toItemDto(item);
 
         if (userId == item.getOwnerId()) {
-            List<Booking> bookingsInPast = bookingRepository.
-                    findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId, CURRENT_TIME);
+            List<Booking> bookingsInPast = bookingRepository
+                    .findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId, currentTime);
 
             List<Booking> bookingsInFuture = bookingRepository.
-                    findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, CURRENT_TIME);
+                    findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, currentTime);
             if (bookingsInPast.size() > 0)
                 itemDTO.setLastBooking(new BookingLinksDTO(bookingsInPast.get(0).getId(), bookingsInPast.get(0).getBooker().getId()));
             if (bookingsInFuture.size() > 0)
@@ -82,14 +82,14 @@ public class ItemService {
     }
 
     public List<ItemDTO> getAllUserItems(long userId) {
-        LocalDateTime CURRENT_TIME = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
         List<ItemDTO> itemsDTO = itemRepository.findAll().stream().filter(a -> a.getOwnerId() == userId).map(mapper::toItemDto).collect(Collectors.toList());
         itemsDTO.forEach((a) -> {
             Long itemId = a.getId();
             List<Booking> bookingsInPast = bookingRepository.
-                    findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId, CURRENT_TIME);
+                    findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId, currentTime);
             List<Booking> bookingsInFuture = bookingRepository.
-                    findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, CURRENT_TIME);
+                    findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, currentTime);
             if (bookingsInPast.size() > 0)
                 a.setLastBooking(new BookingLinksDTO(bookingsInPast.get(0).getId(), bookingsInPast.get(0).getBooker().getId()));
             if (bookingsInFuture.size() > 0)

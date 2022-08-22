@@ -11,11 +11,11 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByBookerIdOrderByStartDesc(Long bookerId);
 
-    List<Booking> findAllByBookerIdAndStartAfterOrderByStartDesc(Long booker_id, LocalDateTime currentTime);
+    List<Booking> findAllByBookerIdAndStartAfterOrderByStartDesc(Long bookerId, LocalDateTime currentTime);
 
-    List<Booking> findAllByBookerIdAndEndBeforeOrderByStartDesc(Long booker_id, LocalDateTime currentTime);
+    List<Booking> findAllByBookerIdAndEndBeforeOrderByStartDesc(Long bookerId, LocalDateTime currentTime);
 
-    List<Booking> findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(Long booker_id, LocalDateTime currentTime, LocalDateTime currentTime2);
+    List<Booking> findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(Long bookerId, LocalDateTime currentTime, LocalDateTime currentTime2);
 
     List<Booking> findAllByBookerIdAndStatusOrderByStartDesc(Long bookerId, Status status);
 
@@ -27,9 +27,9 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByItemOwnerIdAndStartAfterOrderByStartDesc(Long bookerId, LocalDateTime currentTime);
 
-    List<Booking> findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(long userId, LocalDateTime current_time);
+    List<Booking> findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(long userId, LocalDateTime currentTime);
 
-    List<Booking> findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(long userId, LocalDateTime current_time, LocalDateTime current_time1);
+    List<Booking> findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(long userId, LocalDateTime currentTime, LocalDateTime currentTime1);
 
     List<Booking> findAllByItemOwnerIdAndStatusOrderByStartDesc(long userId, Status waiting);
 
