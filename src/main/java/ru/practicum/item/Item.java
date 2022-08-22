@@ -23,6 +23,7 @@ public class Item {
     @Column(name = "owner_id")
     private Long ownerId;
     private Long request;
+
     public Item() {
     }
 

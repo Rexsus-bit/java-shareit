@@ -28,12 +28,12 @@ public class UserService {
         );
     }
 
-    public User update(User user)  {
+    public User update(User user) {
         userValidation(user);
         return repository.save(userFieldsUpdate(user));
     }
 
-    User userFieldsUpdate(User user){
+    User userFieldsUpdate(User user) {
         User userToUpdate = repository.getById(user.getId());
         if (user.getName() != null) {
             userToUpdate.setName(user.getName());
@@ -45,7 +45,7 @@ public class UserService {
     }
 
     public User get(long userId) {
-            return repository.getById(userId);
+        return repository.getById(userId);
     }
 
     public List<User> getAll() {

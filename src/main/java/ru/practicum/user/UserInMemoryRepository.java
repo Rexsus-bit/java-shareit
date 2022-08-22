@@ -3,7 +3,9 @@ package ru.practicum.user;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class UserInMemoryRepository {

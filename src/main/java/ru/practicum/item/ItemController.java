@@ -1,14 +1,12 @@
 package ru.practicum.item;
 
-import ru.practicum.common.Mapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.validation.Valid;
-
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.common.Mapper;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +33,7 @@ public class ItemController {
 
     @GetMapping("/{id}")
     public ItemDTO getItem(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable("id") long itemId) {
-            return itemService.getItem(itemId, userId);
+        return itemService.getItem(itemId, userId);
     }
 
     @GetMapping
@@ -53,7 +51,7 @@ public class ItemController {
 
     @PostMapping("{itemId}/comment")
     public CommentDTO addComment(@RequestHeader("X-Sharer-User-Id") long userId,
-                              @RequestBody @NonNull @Valid Comment comment, @PathVariable long itemId) {
+                                 @RequestBody @NonNull @Valid Comment comment, @PathVariable long itemId) {
         return itemService.addComment(userId, comment, itemId);
     }
 
