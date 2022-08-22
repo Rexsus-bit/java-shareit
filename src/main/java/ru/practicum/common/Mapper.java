@@ -19,9 +19,8 @@ public class Mapper {
 
     private final ItemJpaRepository itemRepository;
     private final UserJpaRepository userRepository;
-    private final CommentJpaRepository commentRepository;
 
-    public static UserDTO toUserDto(User user) {
+    public static UserDTO toUserDto(User user){
         return UserDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -37,23 +36,16 @@ public class Mapper {
                 .build();
     }
 
-    public ItemDTO toItemDto(Item item) {
-
-//            List comments = commentRepository.findAll();
-//        System.out.println(comments);
-//        if () itemDTO.setComments(comments.stream().map(Optional::get).collect(Collectors.toSet()));
-
-
+    public ItemDTO toItemDto(Item item){
         return ItemDTO.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
-//                .comments(comments)
                 .build();
     }
 
-    public static Item toItem(ItemDTO itemDTO) {
+    public static Item toItem(ItemDTO itemDTO){
         return Item.builder()
                 .id(itemDTO.getId())
                 .name(itemDTO.getName())
@@ -62,7 +54,7 @@ public class Mapper {
                 .build();
     }
 
-    public Booking toBooking(BookingDTO bookingDTO) {
+    public Booking toBooking(BookingDTO bookingDTO){
         Item item;
         User booker;
 
@@ -85,7 +77,7 @@ public class Mapper {
                 .build();
     }
 
-    public BookingDTO toBookingDto(Booking booking) {
+    public BookingDTO toBookingDto(Booking booking){
         return BookingDTO.builder()
                 .id(booking.getId())
                 .start(booking.getStart())
