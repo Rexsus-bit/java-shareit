@@ -2,7 +2,6 @@ package ru.practicum.item;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Builder
 @Data

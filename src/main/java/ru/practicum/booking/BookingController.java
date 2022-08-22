@@ -32,29 +32,29 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    public Booking confirmBooking(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long bookingId, @RequestParam boolean approved){
+    public Booking confirmBooking(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long bookingId, @RequestParam boolean approved) {
         return bookingService.confirmBooking(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public Booking getBookingById(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long bookingId){
+    public Booking getBookingById(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long bookingId) {
         return bookingService.getBookingById(userId, bookingId);
     }
 
     @GetMapping
-    List<Booking> getAllBookings(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam (defaultValue = "ALL") State state) {
+    List<Booking> getAllBookings(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam(defaultValue = "ALL") State state) {
         return bookingService.getAllBookings(userId, state);
     }
 
     @GetMapping("/owner")
-    List<Booking> getAllOwnerBookings(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam (defaultValue = "ALL") State state) {
+    List<Booking> getAllOwnerBookings(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam(defaultValue = "ALL") State state) {
         return bookingService.getAllOwnerBookings(userId, state);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Map<String,String>> errorHandler(MethodArgumentTypeMismatchException ex){
-        Map<String,String> resp = new HashMap<>();
-        resp.put("error",String.format("Unknown %s: %s", ex.getName(), ex.getValue()));
+    public ResponseEntity<Map<String, String>> errorHandler(MethodArgumentTypeMismatchException ex) {
+        Map<String, String> resp = new HashMap<>();
+        resp.put("error", String.format("Unknown %s: %s", ex.getName(), ex.getValue()));
         return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
 
     }

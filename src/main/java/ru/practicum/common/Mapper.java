@@ -3,7 +3,6 @@ package ru.practicum.common;
 import lombok.AllArgsConstructor;
 import ru.practicum.booking.Booking;
 import ru.practicum.booking.BookingDTO;
-import ru.practicum.booking.BookingJpaRepository;
 import ru.practicum.booking.Status;
 import ru.practicum.exceptions.NotExistedItemException;
 import ru.practicum.exceptions.NotExistedUserException;
@@ -13,9 +12,6 @@ import ru.practicum.user.User;
 import ru.practicum.user.UserDTO;
 import org.springframework.stereotype.Component;
 import ru.practicum.user.UserJpaRepository;
-
-import java.util.List;
-import java.util.Set;
 
 @Component
 @AllArgsConstructor
