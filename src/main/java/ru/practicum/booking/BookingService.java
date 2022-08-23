@@ -61,20 +61,20 @@ public class BookingService {
 
     public List<Booking> getAllBookings(long userId, State state) {
         if (!userRepository.existsById(userId)) throw new NotExistedUserException();
-        List<Booking> bookingsList;
+        LocalDateTime currentTime = LocalDateTime.now();
         switch (state) {
 
             case ALL:
                 return bookingRepository.findAllByBookerIdOrderByStartDesc(userId);
 
             case PAST:
-                return bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(userId, LocalDateTime.now());
+                return bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(userId, currentTime);
 
             case FUTURE:
-                return bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(userId, LocalDateTime.now());
+                return bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(userId, currentTime);
 
             case CURRENT:
-                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, LocalDateTime.now(), LocalDateTime.now());
+                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, currentTime, currentTime);
 
             case WAITING:
                 return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
@@ -87,17 +87,17 @@ public class BookingService {
 
     public List<Booking> getAllOwnerBookings(long userId, State state) {
         if (!userRepository.existsById(userId)) throw new NotExistedUserException();
+        LocalDateTime currentTime = LocalDateTime.now();
 
-//
         switch (state) {
             case ALL:
                 return bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId);
             case PAST:
-                return bookingRepository.findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(userId, LocalDateTime.now());
+                return bookingRepository.findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(userId, currentTime);
             case FUTURE:
-                return bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(userId, LocalDateTime.now());
+                return bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(userId, currentTime);
             case CURRENT:
-                return bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, LocalDateTime.now(), LocalDateTime.now());
+                return bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, currentTime, currentTime);
             case WAITING:
                 return bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
             case REJECTED:

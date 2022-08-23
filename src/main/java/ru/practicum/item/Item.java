@@ -1,12 +1,12 @@
 package ru.practicum.item;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -24,15 +24,5 @@ public class Item {
     private Long ownerId;
     private Long request;
 
-    public Item() {
-    }
 
-    public Item(Long id, String name, String description, Boolean available, Long ownerId, Long request) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.available = available;
-        this.ownerId = ownerId;
-        this.request = request;
-    }
 }

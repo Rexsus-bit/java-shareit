@@ -23,31 +23,32 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final Mapper mapper;
+    private final String header = "X-Sharer-User-Id";
 
     @PostMapping
-    public BookingDTO createBooking(@RequestHeader("X-Sharer-User-Id") long userId, @RequestBody @NonNull @Valid BookingDTO bookingDTO) {
+    public BookingDTO createBooking(@RequestHeader(header) long userId, @RequestBody @NonNull @Valid BookingDTO bookingDTO) {
 
         bookingDTO.setBookerId(userId);
         return mapper.toBookingDto(bookingService.create(mapper.toBooking(bookingDTO), userId));
     }
 
     @PatchMapping("/{bookingId}")
-    public Booking confirmBooking(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long bookingId, @RequestParam boolean approved) {
+    public Booking confirmBooking(@RequestHeader(header) long userId, @PathVariable long bookingId, @RequestParam boolean approved) {
         return bookingService.confirmBooking(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public Booking getBookingById(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long bookingId) {
+    public Booking getBookingById(@RequestHeader(header) long userId, @PathVariable long bookingId) {
         return bookingService.getBookingById(userId, bookingId);
     }
 
     @GetMapping
-    List<Booking> getAllBookings(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam(defaultValue = "ALL") State state) {
+    List<Booking> getAllBookings(@RequestHeader(header) long userId, @RequestParam(defaultValue = "ALL") State state) {
         return bookingService.getAllBookings(userId, state);
     }
 
     @GetMapping("/owner")
-    List<Booking> getAllOwnerBookings(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam(defaultValue = "ALL") State state) {
+    List<Booking> getAllOwnerBookings(@RequestHeader(header) long userId, @RequestParam(defaultValue = "ALL") State state) {
         return bookingService.getAllOwnerBookings(userId, state);
     }
 
