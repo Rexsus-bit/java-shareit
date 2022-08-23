@@ -88,18 +88,22 @@ public class ItemService {
         LocalDateTime currentTime = LocalDateTime.now();
         List<ItemDTO> itemsDTO = itemRepository.findAll().stream().filter(a -> a.getOwnerId() == userId)
                 .map(mapper::toItemDto).collect(Collectors.toList());
-        itemsDTO.forEach((a) -> {
-            Long itemId = a.getId();
+        itemsDTO.forEach((itemDTO) -> {
+            Long itemId = itemDTO.getId();
             List<Booking> bookingsInPast = bookingRepository
                     .findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId, currentTime);
             List<Booking> bookingsInFuture = bookingRepository
                     .findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, currentTime);
-            if (bookingsInPast.size() > 0)
-                a.setLastBooking(new BookingLinksDTO(bookingsInPast.get(0).getId(), bookingsInPast.get(0)
-                        .getBooker().getId()));
-            if (bookingsInFuture.size() > 0)
-                a.setNextBooking(new BookingLinksDTO(bookingsInFuture.get(0).getId(), bookingsInFuture.get(0)
-                        .getBooker().getId()));
+            if (bookingsInPast.size() > 0) {
+                BookingLinksDTO lastBooking = new BookingLinksDTO(bookingsInPast.get(0).getId(),
+                        bookingsInPast.get(0).getBooker().getId());
+                itemDTO.setLastBooking(lastBooking);
+            }
+            if (bookingsInFuture.size() > 0) {
+                BookingLinksDTO nextBookings = new BookingLinksDTO(bookingsInFuture.get(0).getId(),
+                        bookingsInFuture.get(0).getBooker().getId());
+                itemDTO.setNextBooking(nextBookings);
+            }
         });
         return itemsDTO.stream().sorted(Comparator.comparingLong(ItemDTO::getId)).collect(
                 Collectors.toList());
