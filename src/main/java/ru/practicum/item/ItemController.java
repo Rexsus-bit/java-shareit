@@ -18,27 +18,27 @@ public class ItemController {
 
     private final ItemService itemService;
     private final Mapper mapper;
-    private final String header = "X-Sharer-User-Id";
+    private final String HEADER = "X-Sharer-User-Id";
 
     @PostMapping
-    public ItemDTO create(@RequestHeader(header) long userId, @RequestBody @NonNull @Valid ItemDTO itemDTO) {
+    public ItemDTO create(@RequestHeader(HEADER) long userId, @RequestBody @NonNull @Valid ItemDTO itemDTO) {
 
         return mapper.toItemDto(itemService.create(Mapper.toItem(itemDTO), userId));
     }
 
     @PatchMapping("{itemId}")
-    public ItemDTO update(@RequestHeader(header) long userId, @RequestBody @NonNull ItemDTO itemDTO,
+    public ItemDTO update(@RequestHeader(HEADER) long userId, @RequestBody @NonNull ItemDTO itemDTO,
                           @PathVariable long itemId) {
         return mapper.toItemDto(itemService.update(Mapper.toItem(itemDTO), userId, itemId));
     }
 
     @GetMapping("/{id}")
-    public ItemDTO getItem(@RequestHeader(header) long userId, @PathVariable("id") long itemId) {
+    public ItemDTO getItem(@RequestHeader(HEADER) long userId, @PathVariable("id") long itemId) {
         return itemService.getItem(itemId, userId);
     }
 
     @GetMapping
-    public List<ItemDTO> getAllUserItem(@RequestHeader(header) long userId) {
+    public List<ItemDTO> getAllUserItem(@RequestHeader(HEADER) long userId) {
         return itemService.getAllUserItems(userId);
     }
 
@@ -51,7 +51,7 @@ public class ItemController {
     }
 
     @PostMapping("{itemId}/comment")
-    public CommentDTO addComment(@RequestHeader(header) long userId,
+    public CommentDTO addComment(@RequestHeader(HEADER) long userId,
                                  @RequestBody @NonNull @Valid Comment comment, @PathVariable long itemId) {
         return itemService.addComment(userId, comment, itemId);
     }
