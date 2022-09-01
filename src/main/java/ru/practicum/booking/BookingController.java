@@ -10,6 +10,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import ru.practicum.common.Mapper;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,13 +44,17 @@ public class BookingController {
     }
 
     @GetMapping
-    List<Booking> getAllBookings(@RequestHeader(header) long userId, @RequestParam(defaultValue = "ALL") State state) {
-        return bookingService.getAllBookings(userId, state);
+    List<Booking> getAllBookings(@RequestHeader(header) long userId, @RequestParam(defaultValue = "ALL") State state,
+                                 @Min(0) @RequestParam (required = false) Integer from,
+                                 @Min(1) @RequestParam (required = false) Integer size) {
+        return bookingService.getAllBookings(userId, state, from, size);
     }
 
     @GetMapping("/owner")
-    List<Booking> getAllOwnerBookings(@RequestHeader(header) long userId, @RequestParam(defaultValue = "ALL") State state) {
-        return bookingService.getAllOwnerBookings(userId, state);
+    List<Booking> getAllOwnerBookings(@RequestHeader(header) long userId, @RequestParam(defaultValue = "ALL") State state,
+                                      @Min(0) @RequestParam (required = false) Integer from,
+                                      @Min(1) @RequestParam (required = false) Integer size) {
+        return bookingService.getAllOwnerBookings(userId, state, from, size);
     }
 
     @ExceptionHandler

@@ -1,6 +1,9 @@
 package ru.practicum.item;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.booking.Booking;
 import ru.practicum.booking.BookingJpaRepository;
@@ -12,7 +15,9 @@ import ru.practicum.exceptions.NotExistedUserException;
 import ru.practicum.exceptions.ValidationException;
 import ru.practicum.exceptions.WrongUserException;
 import ru.practicum.user.UserJpaRepository;
+import ru.practicum.util.OffsetLimitPageable;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -84,16 +89,21 @@ public class ItemService {
         return itemDTO;
     }
 
-    public List<ItemDTO> getAllUserItems(long userId) {
+    public List<ItemDTO> getAllUserItems(long userId, Integer from, Integer size) {
         LocalDateTime currentTime = LocalDateTime.now();
         List<ItemDTO> itemsDTO = itemRepository.findAll().stream().filter(a -> a.getOwnerId() == userId)
                 .map(mapper::toItemDto).collect(Collectors.toList());
         itemsDTO.forEach((itemDTO) -> {
             Long itemId = itemDTO.getId();
-            List<Booking> bookingsInPast = bookingRepository
-                    .findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId, currentTime);
-            List<Booking> bookingsInFuture = bookingRepository
-                    .findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, currentTime);
+            Pageable page = OffsetLimitPageable.of(from, size, Sort.by(Sort.Direction.DESC, "end"));
+            Page<Booking> bookingsInPastPage = bookingRepository
+                    .findAllByItemIdAndEndIsBeforeOrderByEndDesc(itemId, currentTime, page);
+            List<Booking> bookingsInPast = bookingsInPastPage.getContent();
+            page = OffsetLimitPageable.of(from, size, Sort.by(Sort.Direction.ASC, "start"));
+
+            Page<Booking> bookingsInFuturePage = bookingRepository
+                    .findAllByItemIdAndStartIsAfterOrderByStartAsc(itemId, currentTime, page);
+            List<Booking> bookingsInFuture = bookingsInFuturePage.getContent();
             if (bookingsInPast.size() > 0) {
                 BookingLinksDTO lastBooking = new BookingLinksDTO(bookingsInPast.get(0).getId(),
                         bookingsInPast.get(0).getBooker().getId());

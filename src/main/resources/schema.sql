@@ -1,4 +1,4 @@
-DROP table IF EXISTS users, items, bookings, comments;
+DROP table IF EXISTS users, items, bookings, comments, requests;
 
 CREATE TABLE IF NOT EXISTS users
 (
@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS requests
 (
     id           BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description  VARCHAR,
-    requester_id BIGINT
+    requester_id BIGINT REFERENCES users (id),
+    created      TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE IF NOT EXISTS comments
