@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.common.Mapper;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,6 @@ public class ItemController {
 
     @PostMapping
     public ItemDTO create(@RequestHeader(header) long userId, @RequestBody @NonNull @Valid ItemDTO itemDTO) {
-
         return mapper.toItemDto(itemService.create(Mapper.toItem(itemDTO), userId));
     }
 
@@ -38,8 +38,9 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDTO> getAllUserItem(@RequestHeader(header) long userId) {
-        return itemService.getAllUserItems(userId);
+    public List<ItemDTO> getAllUserItem(@RequestHeader(header) long userId, @Min(0) @RequestParam (required = false)
+    Integer from, @Min(1) @RequestParam (required = false) Integer size) {
+        return itemService.getAllUserItems(userId, from, size);
     }
 
     @GetMapping("/search")

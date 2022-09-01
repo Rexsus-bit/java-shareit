@@ -1,6 +1,8 @@
 package ru.practicum.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.common.Mapper;
 import ru.practicum.exceptions.AccessErrorException;
@@ -8,8 +10,10 @@ import ru.practicum.exceptions.NotExistedBookingException;
 import ru.practicum.exceptions.NotExistedUserException;
 import ru.practicum.exceptions.ValidationException;
 import ru.practicum.user.UserJpaRepository;
+import ru.practicum.util.OffsetLimitPageable;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -59,49 +63,44 @@ public class BookingService {
         return booking;
     }
 
-    public List<Booking> getAllBookings(long userId, State state) {
+    public List<Booking> getAllBookings(long userId, State state, Integer from, Integer size) {
         if (!userRepository.existsById(userId)) throw new NotExistedUserException();
         LocalDateTime currentTime = LocalDateTime.now();
+        Pageable page = OffsetLimitPageable.of(from, size, Sort.by(Sort.Direction.DESC, "start"));
         switch (state) {
-
             case ALL:
-                return bookingRepository.findAllByBookerIdOrderByStartDesc(userId);
-
+                return bookingRepository.findAllByBookerIdOrderByStartDesc(userId, page);
             case PAST:
-                return bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(userId, currentTime);
-
+                return bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(userId, currentTime, page);
             case FUTURE:
-                return bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(userId, currentTime);
-
+                return bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(userId, currentTime, page);
             case CURRENT:
-                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, currentTime, currentTime);
-
+                return bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, currentTime, currentTime, page);
             case WAITING:
-                return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
-
+                return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING, page);
             case REJECTED:
-                return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
+                return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED, page);
         }
         return null;
     }
 
-    public List<Booking> getAllOwnerBookings(long userId, State state) {
+    public List<Booking> getAllOwnerBookings(long userId, State state, Integer from, Integer size) {
         if (!userRepository.existsById(userId)) throw new NotExistedUserException();
         LocalDateTime currentTime = LocalDateTime.now();
-
+        Pageable page = OffsetLimitPageable.of(from, size, Sort.by(Sort.Direction.DESC, "start"));
         switch (state) {
             case ALL:
-                return bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId);
+                return bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId, page);
             case PAST:
-                return bookingRepository.findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(userId, currentTime);
+                return bookingRepository.findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(userId, currentTime, page);
             case FUTURE:
-                return bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(userId, currentTime);
+                return bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(userId, currentTime, page);
             case CURRENT:
-                return bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, currentTime, currentTime);
+                return bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, currentTime, currentTime, page);
             case WAITING:
-                return bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
+                return bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.WAITING, page);
             case REJECTED:
-                return bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
+                return bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.REJECTED, page);
         }
         return null;
 
