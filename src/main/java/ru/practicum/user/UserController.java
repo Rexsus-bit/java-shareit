@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping
     public UserDTO create(@RequestBody @NotBlank @Valid UserDTO userDTO) {
-        return Mapper.toUserDto(userService.create(Mapper.toUser(userDTO)));
+        return userService.create(Mapper.toUser(userDTO));
     }
 
     @GetMapping("{userId}")

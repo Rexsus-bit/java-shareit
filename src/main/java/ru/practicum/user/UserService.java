@@ -2,6 +2,7 @@ package ru.practicum.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.common.Mapper;
 
 import javax.validation.ValidationException;
 import java.util.List;
@@ -14,9 +15,9 @@ public class UserService {
     private final UserInMemoryRepository userRepository;
     private final UserJpaRepository repository;
 
-    public User create(User user) {
+    public UserDTO create(User user) {
         userValidation(user);
-        return repository.save(user);
+        return Mapper.toUserDto(repository.save(user));
     }
 
     private void userValidation(User user) {
