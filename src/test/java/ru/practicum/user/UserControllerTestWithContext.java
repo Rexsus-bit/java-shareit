@@ -2,7 +2,6 @@ package ru.practicum.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,7 +33,7 @@ public class UserControllerTestWithContext {
     @MockBean
     private Mapper mapper;
 
-    UserDTO userDTO = new UserDTO (1L, "username", "email@ya.ru");
+    UserDTO userDTO = new UserDTO(1L, "username", "email@ya.ru");
 
     User user = new User(1L, "Tom", "test@es.we");
 

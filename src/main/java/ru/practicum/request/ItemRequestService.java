@@ -36,7 +36,7 @@ public class ItemRequestService {
 
     public List<ItemRequestDTO> getItemRequestsOfUser(long userId) {
         userJpaRepository.findById(userId).orElseThrow(NotExistedUserException::new);
-        List <ItemRequest> itemRequestList = itemRequestJpaRepository.findAllByRequesterId(userId);
+        List<ItemRequest> itemRequestList = itemRequestJpaRepository.findAllByRequesterId(userId);
         return itemRequestList.stream().map(mapper::toItemRequestDTO).collect(Collectors.toList());
     }
 
@@ -49,6 +49,6 @@ public class ItemRequestService {
 
     public ItemRequestDTO getItemRequestById(long userId, long itemRequestId) {
         userJpaRepository.findById(userId).orElseThrow(NotExistedUserException::new);
-       return mapper.toItemRequestDTO(itemRequestJpaRepository.findById(itemRequestId).orElseThrow(NotExistedItemRequestException::new));
+        return mapper.toItemRequestDTO(itemRequestJpaRepository.findById(itemRequestId).orElseThrow(NotExistedItemRequestException::new));
     }
 }

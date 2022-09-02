@@ -12,7 +12,7 @@ public class OffsetLimitPageable implements Pageable {
     private final int limit;
     private final Sort sort;
 
-    private final static Integer DEFAULT_PAGE_SIZE = 20;
+    private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     protected OffsetLimitPageable(int offset, int limit, Sort sort) {
         this.offset = offset;

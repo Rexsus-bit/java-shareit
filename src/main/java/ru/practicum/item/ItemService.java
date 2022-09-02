@@ -17,7 +17,6 @@ import ru.practicum.exceptions.WrongUserException;
 import ru.practicum.user.UserJpaRepository;
 import ru.practicum.util.OffsetLimitPageable;
 
-import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
