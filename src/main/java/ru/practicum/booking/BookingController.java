@@ -24,13 +24,12 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final Mapper mapper;
-    private final String header = "X-Sharer-User-Id";
+    private static final String header = "X-Sharer-User-Id";
 
     @PostMapping
     public BookingDTO createBooking(@RequestHeader(header) long userId, @RequestBody @NonNull @Valid BookingDTO bookingDTO) {
-
         bookingDTO.setBookerId(userId);
-        return mapper.toBookingDto(bookingService.create(mapper.toBooking(bookingDTO), userId));
+        return mapper.toBookingDto(bookingService.createBooking(mapper.toBooking(bookingDTO), userId));
     }
 
     @PatchMapping("/{bookingId}")
@@ -44,7 +43,7 @@ public class BookingController {
     }
 
     @GetMapping
-    List<Booking> getAllBookings(@RequestHeader(header) long userId, @RequestParam(defaultValue = "ALL") State state,
+    List<Booking> getAllBookings(@RequestHeader(header) long userId, @RequestParam(required = false, defaultValue = "ALL") State state,
                                  @Min(0) @RequestParam (required = false) Integer from,
                                  @Min(1) @RequestParam (required = false) Integer size) {
         return bookingService.getAllBookings(userId, state, from, size);

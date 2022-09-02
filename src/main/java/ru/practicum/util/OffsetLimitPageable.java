@@ -2,6 +2,7 @@ package ru.practicum.util;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.NonNull;
 
 import javax.validation.ValidationException;
 import java.util.Optional;
@@ -12,7 +13,7 @@ public class OffsetLimitPageable implements Pageable {
     private final int limit;
     private final Sort sort;
 
-    private final static Integer DEFAULT_PAGE_SIZE = 20;
+    private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     protected OffsetLimitPageable(int offset, int limit, Sort sort) {
         this.offset = offset;
@@ -85,22 +86,23 @@ public class OffsetLimitPageable implements Pageable {
 
     @Override
     public Pageable next() {
-        return null;
+        return new OffsetLimitPageable(offset, limit, sort);
     }
 
     @Override
     public Pageable previousOrFirst() {
-        return null;
+        return new OffsetLimitPageable(offset, limit, sort);
     }
 
+    @NonNull
     @Override
     public Pageable first() {
-        return null;
+        return new OffsetLimitPageable(offset, limit, sort);
     }
 
     @Override
     public Pageable withPage(int pageNumber) {
-        return null;
+        return new OffsetLimitPageable(offset, limit, sort);
     }
 
     @Override

@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.common.Mapper;
-import ru.practicum.exceptions.NotExistedUserException;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -22,16 +20,12 @@ public class UserController {
 
     @PostMapping
     public UserDTO create(@RequestBody @NotBlank @Valid UserDTO userDTO) {
-        return Mapper.toUserDto(userService.create(Mapper.toUser(userDTO)));
+        return userService.create(Mapper.toUser(userDTO));
     }
 
     @GetMapping("{userId}")
     public UserDTO get(@PathVariable long userId) {
-        try {
             return Mapper.toUserDto(userService.get(userId));
-        } catch (EntityNotFoundException e) {
-            throw new NotExistedUserException();
-        }
     }
 
     @GetMapping
@@ -42,9 +36,9 @@ public class UserController {
     }
 
     @PatchMapping("{userId}")
-    public UserDTO update(@RequestBody UserDTO userDTO, @PathVariable long userId) throws IllegalAccessException {
+    public UserDTO update(@RequestBody UserDTO userDTO, @PathVariable long userId) {
         userDTO.setId(userId);
-        return Mapper.toUserDto(userService.update(Mapper.toUser(userDTO)));
+        return userService.update(Mapper.toUser(userDTO));
     }
 
     @DeleteMapping("{userId}")

@@ -17,7 +17,6 @@ import ru.practicum.exceptions.WrongUserException;
 import ru.practicum.user.UserJpaRepository;
 import ru.practicum.util.OffsetLimitPageable;
 
-import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -67,7 +66,7 @@ public class ItemService {
     public ItemDTO getItem(long itemId, long userId) {
         LocalDateTime currentTime = LocalDateTime.now();
         Item item = itemRepository.findById(itemId).orElseThrow(NotExistedItemException::new);
-        ItemDTO itemDTO = mapper.toItemDto(item);
+        ItemDTO itemDTO = mapper.toItemDTO(item);
 
         if (userId == item.getOwnerId()) {
             List<Booking> bookingsInPast = bookingRepository
@@ -85,14 +84,13 @@ public class ItemService {
         List<Comment> comments = commentRepository.findAllByItemId(itemId);
         itemDTO.setComments(new HashSet<>(comments.stream().map(mapper::toCommentDTO)
                 .collect(Collectors.toList())));
-
         return itemDTO;
     }
 
     public List<ItemDTO> getAllUserItems(long userId, Integer from, Integer size) {
         LocalDateTime currentTime = LocalDateTime.now();
         List<ItemDTO> itemsDTO = itemRepository.findAll().stream().filter(a -> a.getOwnerId() == userId)
-                .map(mapper::toItemDto).collect(Collectors.toList());
+                .map(mapper::toItemDTO).collect(Collectors.toList());
         itemsDTO.forEach((itemDTO) -> {
             Long itemId = itemDTO.getId();
             Pageable page = OffsetLimitPageable.of(from, size, Sort.by(Sort.Direction.DESC, "end"));
@@ -115,8 +113,13 @@ public class ItemService {
                 itemDTO.setNextBooking(nextBookings);
             }
         });
-        return itemsDTO.stream().sorted(Comparator.comparingLong(ItemDTO::getId)).collect(
-                Collectors.toList());
+        return itemsDTO.stream()
+                .sorted(Comparator.comparingLong(ItemDTO::getId))
+                .peek(
+                (itemDTO) -> {
+                    if (itemDTO.getComments() == null) itemDTO.setComments(new HashSet<>());
+                })
+                .collect(Collectors.toList());
     }
 
     public List<Item> searchAvailableItems(String text) {

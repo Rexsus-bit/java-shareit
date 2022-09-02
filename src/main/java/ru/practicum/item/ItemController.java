@@ -19,17 +19,17 @@ public class ItemController {
 
     private final ItemService itemService;
     private final Mapper mapper;
-    private final String header = "X-Sharer-User-Id";
+    private static final String header = "X-Sharer-User-Id";
 
     @PostMapping
     public ItemDTO create(@RequestHeader(header) long userId, @RequestBody @NonNull @Valid ItemDTO itemDTO) {
-        return mapper.toItemDto(itemService.create(Mapper.toItem(itemDTO), userId));
+        return mapper.toItemDTO(itemService.create(Mapper.toItem(itemDTO), userId));
     }
 
     @PatchMapping("{itemId}")
     public ItemDTO update(@RequestHeader(header) long userId, @RequestBody @NonNull ItemDTO itemDTO,
                           @PathVariable long itemId) {
-        return mapper.toItemDto(itemService.update(Mapper.toItem(itemDTO), userId, itemId));
+        return mapper.toItemDTO(itemService.update(Mapper.toItem(itemDTO), userId, itemId));
     }
 
     @GetMapping("/{id}")
@@ -47,7 +47,7 @@ public class ItemController {
     public List<ItemDTO> search(@RequestParam String text) {
         return itemService.searchAvailableItems(text)
                 .stream()
-                .map(mapper::toItemDto)
+                .map(mapper::toItemDTO)
                 .collect(Collectors.toList());
     }
 

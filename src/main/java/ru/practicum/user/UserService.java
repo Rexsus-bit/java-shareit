@@ -2,35 +2,23 @@ package ru.practicum.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.common.Mapper;
+import ru.practicum.exceptions.NotExistedUserException;
 
-import javax.validation.ValidationException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
-    private final UserInMemoryRepository userRepository;
     private final UserJpaRepository repository;
 
-    public User create(User user) {
-        userValidation(user);
-        return repository.save(user);
+    public UserDTO create(User user) {
+        return Mapper.toUserDto(repository.save(user));
     }
 
-    private void userValidation(User user) {
-        userRepository.getUsers().values().forEach(
-                user1 -> {
-                    if (user1.getEmail().equals(user.getEmail()))
-                        throw new ValidationException();
-                }
-        );
-    }
-
-    public User update(User user) {
-        userValidation(user);
-        return repository.save(userFieldsUpdate(user));
+    public UserDTO update(User user) {
+        return Mapper.toUserDto(repository.save(userFieldsUpdate(user)));
     }
 
     User userFieldsUpdate(User user) {
@@ -45,13 +33,11 @@ public class UserService {
     }
 
     public User get(long userId) {
-        return repository.getById(userId);
+        return repository.findById(userId).orElseThrow(NotExistedUserException::new);
     }
 
     public List<User> getAll() {
-        return repository.findAll()
-                .stream()
-                .collect(Collectors.toList());
+        return new ArrayList<>(repository.findAll());
     }
 
     public void delete(long userId) {

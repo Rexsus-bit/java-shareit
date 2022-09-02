@@ -6,7 +6,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,4 +22,5 @@ public class ItemRequest {
     @Column(name = "requester_id")
     private long requesterId;
     private LocalDateTime created;
+
 }

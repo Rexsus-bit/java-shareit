@@ -13,7 +13,6 @@ import ru.practicum.user.UserJpaRepository;
 import ru.practicum.util.OffsetLimitPageable;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class BookingService {
     private final UserJpaRepository userRepository;
     private final Mapper mapper;
 
-    public Booking create(@Valid Booking booking, long userId) {
+    public Booking createBooking(@Valid Booking booking, long userId) {
 
         if (booking.getStart().isBefore(LocalDateTime.now())
                 || booking.getEnd().isBefore(LocalDateTime.now()))
@@ -32,15 +31,13 @@ public class BookingService {
         if (userId == booking.getItem().getOwnerId()) {
             throw new AccessErrorException();
         }
-
-        bookingRepository.save(booking);
-        return bookingRepository.getById(booking.getId());
+        return bookingRepository.save(booking);
     }
 
-    public Booking confirmBooking(long userId, long bookingId, boolean approval) {
+    public Booking confirmBooking(long ownerId, long bookingId, boolean approval) {
 
-        Booking booking = bookingRepository.getById(bookingId);
-        if (userId != booking.getItem().getOwnerId()) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(NotExistedUserException:: new);
+        if (ownerId != booking.getItem().getOwnerId()) {
             throw new AccessErrorException();
         }
         if (booking.getStatus() == Status.APPROVED) {
@@ -80,12 +77,14 @@ public class BookingService {
                 return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING, page);
             case REJECTED:
                 return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED, page);
+            default: return null;
         }
-        return null;
     }
 
     public List<Booking> getAllOwnerBookings(long userId, State state, Integer from, Integer size) {
-        if (!userRepository.existsById(userId)) throw new NotExistedUserException();
+        if (!userRepository.existsById(userId)) {
+            throw new NotExistedUserException();
+        }
         LocalDateTime currentTime = LocalDateTime.now();
         Pageable page = OffsetLimitPageable.of(from, size, Sort.by(Sort.Direction.DESC, "start"));
         switch (state) {
