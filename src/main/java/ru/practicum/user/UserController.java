@@ -27,11 +27,7 @@ public class UserController {
 
     @GetMapping("{userId}")
     public UserDTO get(@PathVariable long userId) {
-        try {
             return Mapper.toUserDto(userService.get(userId));
-        } catch (EntityNotFoundException e) {
-            throw new NotExistedUserException();
-        }
     }
 
     @GetMapping

@@ -3,6 +3,7 @@ package ru.practicum.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.common.Mapper;
+import ru.practicum.exceptions.NotExistedUserException;
 
 import javax.validation.ValidationException;
 import java.util.List;
@@ -46,7 +47,7 @@ public class UserService {
     }
 
     public User get(long userId) {
-        return repository.getById(userId);
+        return repository.findById(userId).orElseThrow(NotExistedUserException::new);
     }
 
     public List<User> getAll() {
