@@ -86,12 +86,12 @@ public class OffsetLimitPageable implements Pageable {
 
     @Override
     public Pageable next() {
-        return null;
+        return new OffsetLimitPageable(offset, limit, sort);
     }
 
     @Override
     public Pageable previousOrFirst() {
-        return null;
+        return new OffsetLimitPageable(offset, limit, sort);
     }
 
     @NonNull
@@ -102,7 +102,7 @@ public class OffsetLimitPageable implements Pageable {
 
     @Override
     public Pageable withPage(int pageNumber) {
-        return null;
+        return new OffsetLimitPageable(offset, limit, sort);
     }
 
     @Override
