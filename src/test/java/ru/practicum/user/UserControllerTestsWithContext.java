@@ -1,7 +1,7 @@
 package ru.practicum.user;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,13 +17,12 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
-public class UserControllerTestWithContext {
+public class UserControllerTestsWithContext {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -37,9 +36,15 @@ public class UserControllerTestWithContext {
     @MockBean
     private Mapper mapper;
 
-    UserDTO userDTO = new UserDTO(1L, "username", "email@ya.ru");
+    UserDTO userDTO;
+    User user;
 
-    User user = new User(1L, "Tom", "test@es.we");
+    @BeforeEach
+    void beforeEach(){
+        userDTO = new UserDTO(1L, "username", "email@ya.ru");
+        user = new User(1L, "Tom", "test@es.we");
+    }
+
 
 
     @Test
@@ -59,19 +64,35 @@ public class UserControllerTestWithContext {
     }
 
     @Test
-    void shouldCreateEmptyUserFailTest() throws Exception {
-        user = new User(1L, null, null);
+    void shouldCreateWrongUserEmailFailTest() throws Exception {
+        userDTO = new UserDTO(1L, "Sam", "wrongEmail");
         when(userService.create(user))
                 .thenReturn(userDTO);
 
         mvc.perform(post("/users")
-                        .content(objectMapper.writeValueAsString(user))
+                        .content(objectMapper.writeValueAsString(userDTO))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void shouldFailCreateUserWithEmptyNameTest() throws Exception {
+        userDTO = new UserDTO(1L, " ", "email@ey.ru");
+        when(userService.create(user))
+                .thenReturn(userDTO);
+
+        mvc.perform(post("/users")
+                        .content(objectMapper.writeValueAsString(userDTO))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest());
+    }
+
     @Test
     void shouldGetUserByIdTest() throws Exception {
         user = new User(1L, "Tom", "test@es.we");
@@ -109,6 +130,30 @@ public class UserControllerTestWithContext {
                 .andExpect(jsonPath("$.[0].email", is("test@es.we"), String.class))
                 .andExpect(jsonPath("$.[1].email", is("test@es.we1"), String.class));
     }
+
+    @Test
+    void shouldDeleteById() throws Exception {
+        mvc.perform(delete("/users/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldUpdateUserTest() throws Exception {
+        when(userService.update(user))
+                .thenReturn(userDTO);
+
+        mvc.perform(patch("/users/1")
+                        .content(objectMapper.writeValueAsString(userDTO))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(userDTO.getId()), long.class))
+                .andExpect(jsonPath("$.name", is(userDTO.getName())))
+                .andExpect(jsonPath("$.email", is(userDTO.getEmail())));
+    }
+
+
 
 
 

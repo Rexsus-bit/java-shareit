@@ -38,9 +38,9 @@ public class UserController {
     }
 
     @PatchMapping("{userId}")
-    public UserDTO update(@RequestBody UserDTO userDTO, @PathVariable long userId) throws IllegalAccessException {
+    public UserDTO update(@RequestBody UserDTO userDTO, @PathVariable long userId) {
         userDTO.setId(userId);
-        return Mapper.toUserDto(userService.update(Mapper.toUser(userDTO)));
+        return userService.update(Mapper.toUser(userDTO));
     }
 
     @DeleteMapping("{userId}")

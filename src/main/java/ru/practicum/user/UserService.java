@@ -30,9 +30,9 @@ public class UserService {
         );
     }
 
-    public User update(User user) {
+    public UserDTO update(User user) {
         userValidation(user);
-        return repository.save(userFieldsUpdate(user));
+        return Mapper.toUserDto(repository.save(userFieldsUpdate(user)));
     }
 
     User userFieldsUpdate(User user) {
