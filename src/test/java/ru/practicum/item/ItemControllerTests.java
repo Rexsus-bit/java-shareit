@@ -7,14 +7,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
 import ru.practicum.common.Mapper;
-
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -57,7 +54,7 @@ public class ItemControllerTests {
 
     @Test
     public void shouldCreateItemTest() throws Exception {
-        when(itemService.create(any(),anyLong()))
+        when(itemService.create(any(), anyLong()))
                 .thenReturn(item);
         when(mapper.toItemDTO(item))
                 .thenReturn(itemDTO);
@@ -76,7 +73,7 @@ public class ItemControllerTests {
 
     @Test
     public void shouldUpdateItemTest() throws Exception {
-        when(itemService.update(any(), anyLong(),anyLong()))
+        when(itemService.update(any(), anyLong(), anyLong()))
                 .thenReturn(item);
         when(mapper.toItemDTO(item))
                 .thenReturn(itemDTO);
@@ -111,7 +108,7 @@ public class ItemControllerTests {
 
     @Test
     public void shouldAddCommentTest() throws Exception {
-        CommentDTO commentDTO = new CommentDTO(1L,"comment", "Alex", LocalDateTime.now());
+        CommentDTO commentDTO = new CommentDTO(1L, "comment", "Alex", LocalDateTime.now());
 
         when(itemService.addComment(anyLong(), any(), anyLong()))
                 .thenReturn(commentDTO);
@@ -139,6 +136,22 @@ public class ItemControllerTests {
                 .andExpect(jsonPath("$.id", is(itemDTO.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(itemDTO.getName()), String.class))
                 .andExpect(jsonPath("$.description", is(itemDTO.getDescription()), String.class));
+    }
+
+    @Test
+    public void shouldGetAllItemsOfOwner() throws Exception {
+        when(itemService.getAllUserItems(anyLong(), anyInt(), anyInt()))
+                .thenReturn(List.of(itemDTO));
+
+        mvc.perform(get("/items")
+                        .param("from", "0")
+                        .param("size", "5")
+                        .header("X-Sharer-User-Id", 1L))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$.[0].id", is(itemDTO.getId()), Long.class))
+                .andExpect(jsonPath("$.[0].name", is(itemDTO.getName()), String.class))
+                .andExpect(jsonPath("$.[0].description", is(itemDTO.getDescription()), String.class));
     }
 
 
