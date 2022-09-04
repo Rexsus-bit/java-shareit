@@ -6,6 +6,7 @@ import ru.practicum.common.Mapper;
 import ru.practicum.exceptions.NotExistedUserException;
 
 import javax.validation.ValidationException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,25 +14,25 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserInMemoryRepository userRepository;
+//    private final UserInMemoryRepository userRepository;
     private final UserJpaRepository repository;
 
     public UserDTO create(User user) {
-        userValidation(user);
+//        userValidation(user);
         return Mapper.toUserDto(repository.save(user));
     }
 
-    private void userValidation(User user) {
-        userRepository.getUsers().values().forEach(
-                user1 -> {
-                    if (user1.getEmail().equals(user.getEmail()))
-                        throw new ValidationException();
-                }
-        );
-    }
+//    private void userValidation(User user) {
+//        userRepository.getUsers().values().forEach(
+//                user1 -> {
+//                    if (user1.getEmail().equals(user.getEmail()))
+//                        throw new ValidationException();
+//                }
+//        );
+//    }
 
     public UserDTO update(User user) {
-        userValidation(user);
+//        userValidation(user);
         return Mapper.toUserDto(repository.save(userFieldsUpdate(user)));
     }
 
@@ -51,9 +52,7 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return repository.findAll()
-                .stream()
-                .collect(Collectors.toList());
+        return new ArrayList<>(repository.findAll());
     }
 
     public void delete(long userId) {

@@ -44,13 +44,13 @@ class UserControllerTests {
 
         userDTO = new UserDTO(
                 1L,
-                "John",
-                "john.doe@mail.com"
+                "Andrey",
+                "andrey.snith@gmail.com"
         );
         user = new User(
-                2L,
-                "John",
-                "john.doe@mail.com"
+                1L,
+                "Den",
+                "r.ssa@gmail.com"
         );
     }
 
