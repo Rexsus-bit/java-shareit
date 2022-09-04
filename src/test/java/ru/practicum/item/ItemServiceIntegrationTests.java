@@ -9,14 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.booking.Booking;
 import ru.practicum.booking.BookingLinksDTO;
 import ru.practicum.booking.BookingService;
-import ru.practicum.common.Mapper;
 import ru.practicum.user.User;
 import ru.practicum.user.UserDTO;
 import ru.practicum.user.UserService;
 import ru.practicum.util.DataBaseCleaner;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,10 +26,9 @@ import static org.hamcrest.Matchers.hasProperty;
         properties = "db.name=test",
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class itemServiceIntegrationTests {
+public class ItemServiceIntegrationTests {
 
     private final UserService userService;
-    private final Mapper mapper;
     private final ItemService itemService;
     private final BookingService bookingService;
 
@@ -44,7 +41,7 @@ public class itemServiceIntegrationTests {
 
 
     @BeforeEach
-    void beforeTest(){
+    void beforeTest() {
         dataBaseCleaner.clean();
 
         user = new User(1L, "James", "james@yandex.com");
@@ -127,7 +124,7 @@ public class itemServiceIntegrationTests {
     }
 
     @Test
-    void shouldFindItems(){
+    void shouldFindItems() {
 
         item1 = itemService.create(item1, userDTO.getId());
         item2 = itemService.create(item2, userDTO.getId());

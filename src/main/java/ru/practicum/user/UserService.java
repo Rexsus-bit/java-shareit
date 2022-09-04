@@ -5,10 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.common.Mapper;
 import ru.practicum.exceptions.NotExistedUserException;
 
-import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

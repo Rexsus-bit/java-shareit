@@ -27,7 +27,7 @@ public class UserServiceTests {
         UserDTO userDTO = userService.create(user);
 
         assertThat(userDTO, hasProperty("id", equalTo(1L)));
-        assertThat(new User(1L, "James", "james@yandex.com"), equalTo(userService.get(1l)));
+        assertThat(new User(1L, "James", "james@yandex.com"), equalTo(userService.get(1L)));
     }
 
 }
