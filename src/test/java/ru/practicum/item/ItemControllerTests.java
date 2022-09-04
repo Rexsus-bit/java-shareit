@@ -2,7 +2,6 @@ package ru.practicum.item;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,7 +19,6 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -45,14 +43,14 @@ public class ItemControllerTests {
 
     Item item = Item.builder()
             .id(1L)
-            .name( "name")
+            .name("name")
             .description("descript")
             .available(true)
             .build();
 
     ItemDTO itemDTO = ItemDTO.builder()
             .id(1L)
-            .name( "name")
+            .name("name")
             .description("descript")
             .available(true)
             .build();
@@ -72,8 +70,8 @@ public class ItemControllerTests {
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemDTO.getId()), Long.class))
-                .andExpect( jsonPath("$.name", is(itemDTO.getName()), String.class))
-                .andExpect( jsonPath("$.description", is(itemDTO.getDescription()), String.class));
+                .andExpect(jsonPath("$.name", is(itemDTO.getName()), String.class))
+                .andExpect(jsonPath("$.description", is(itemDTO.getDescription()), String.class));
     }
 
     @Test
@@ -91,8 +89,8 @@ public class ItemControllerTests {
                         .characterEncoding(StandardCharsets.UTF_8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemDTO.getId()), Long.class))
-                .andExpect( jsonPath("$.name", is(itemDTO.getName()), String.class))
-                .andExpect( jsonPath("$.description", is(itemDTO.getDescription()), String.class));
+                .andExpect(jsonPath("$.name", is(itemDTO.getName()), String.class))
+                .andExpect(jsonPath("$.description", is(itemDTO.getDescription()), String.class));
     }
 
     @Test
@@ -128,6 +126,19 @@ public class ItemControllerTests {
                 .andExpect(jsonPath("$.id", is(commentDTO.getId()), Long.class))
                 .andExpect(jsonPath("$.text", is(commentDTO.getText()), String.class))
                 .andExpect(jsonPath("$.authorName", is(commentDTO.getAuthorName()), String.class));
+    }
+
+    @Test
+    public void shouldGetItemByIdTest() throws Exception {
+        when(itemService.getItem(anyLong(), anyLong()))
+                .thenReturn(itemDTO);
+
+        mvc.perform(get("/items/1")
+                        .header("X-Sharer-User-Id", 1L))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(itemDTO.getId()), Long.class))
+                .andExpect(jsonPath("$.name", is(itemDTO.getName()), String.class))
+                .andExpect(jsonPath("$.description", is(itemDTO.getDescription()), String.class));
     }
 
 
