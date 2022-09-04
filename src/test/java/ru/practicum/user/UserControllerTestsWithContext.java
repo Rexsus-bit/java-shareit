@@ -40,7 +40,7 @@ public class UserControllerTestsWithContext {
     User user;
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() {
         userDTO = new UserDTO(1L, "username", "email@ya.ru");
         user = new User(1L, "Tom", "test@es.we");
     }
@@ -109,6 +109,7 @@ public class UserControllerTestsWithContext {
                 .andExpect(jsonPath("$.name", is(userDTO.getName())))
                 .andExpect(jsonPath("$.email", is(userDTO.getEmail())));
     }
+
     @Test
     void shouldGetAllUsersTest() throws Exception {
         user = new User(1L, "Tom", "test@es.we");
