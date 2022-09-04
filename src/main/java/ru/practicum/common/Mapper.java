@@ -40,7 +40,7 @@ public class Mapper {
                 .build();
     }
 
-    public ItemDTO toItemDto(Item item) {
+    public ItemDTO toItemDTO(Item item) {
         return ItemDTO.builder()
                 .id(item.getId())
                 .name(item.getName())

@@ -66,7 +66,7 @@ public class ItemService {
     public ItemDTO getItem(long itemId, long userId) {
         LocalDateTime currentTime = LocalDateTime.now();
         Item item = itemRepository.findById(itemId).orElseThrow(NotExistedItemException::new);
-        ItemDTO itemDTO = mapper.toItemDto(item);
+        ItemDTO itemDTO = mapper.toItemDTO(item);
 
         if (userId == item.getOwnerId()) {
             List<Booking> bookingsInPast = bookingRepository
@@ -90,7 +90,7 @@ public class ItemService {
     public List<ItemDTO> getAllUserItems(long userId, Integer from, Integer size) {
         LocalDateTime currentTime = LocalDateTime.now();
         List<ItemDTO> itemsDTO = itemRepository.findAll().stream().filter(a -> a.getOwnerId() == userId)
-                .map(mapper::toItemDto).collect(Collectors.toList());
+                .map(mapper::toItemDTO).collect(Collectors.toList());
         itemsDTO.forEach((itemDTO) -> {
             Long itemId = itemDTO.getId();
             Pageable page = OffsetLimitPageable.of(from, size, Sort.by(Sort.Direction.DESC, "end"));
