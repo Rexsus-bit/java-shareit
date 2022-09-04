@@ -16,6 +16,7 @@ import ru.practicum.user.UserService;
 import ru.practicum.util.DataBaseCleaner;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,12 +50,12 @@ public class itemServiceIntegrationTests {
         user = new User(1L, "James", "james@yandex.com");
         userDTO = userService.create(user);
         item1 = Item.builder().name("1")
-                .description("desript")
+                .description("отверТка")
                 .available(true)
                 .ownerId(userDTO.getId())
                 .build();
         item2 = Item.builder().name("2")
-                .description("desript2")
+                .description("молоток")
                 .available(true)
                 .ownerId(userDTO.getId())
                 .build();
@@ -64,17 +65,12 @@ public class itemServiceIntegrationTests {
 
     @Test
     public void shouldGetAllItemsOfOwner() {
-
-
-
-
         assertThat(userDTO, hasProperty("id", equalTo(1L)));
-
 
         item1 = itemService.create(item1, userDTO.getId());
         item2 = itemService.create(item2, userDTO.getId());
 
-        assertThat(itemService.getAllUserItems(1L, 0, 3), equalTo(List.of(mapper.toItemDto(item1), mapper.toItemDto(item2))));
+        assertThat(itemService.getAllUserItems(1L, 0, 3), equalTo(List.of(itemService.getItem(1,2), itemService.getItem(2,2))));
 
         User userBooker = User.builder()
                 .name("name")
@@ -129,5 +125,16 @@ public class itemServiceIntegrationTests {
                         equalTo(new BookingLinksDTO(booking1ForItem2.getId(),booking1ForItem2.getBooker().getId()))));
         assertThat(allUserItemsList.toArray()[1], hasProperty("name"));
     }
+
+    @Test
+    void shouldFindItems(){
+
+        item1 = itemService.create(item1, userDTO.getId());
+        item2 = itemService.create(item2, userDTO.getId());
+
+        assertThat(itemService.searchAvailableItems("ОТВЕРТКА"), equalTo(List.of(item1)));
+
+    }
+
 
 }

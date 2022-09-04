@@ -84,7 +84,6 @@ public class ItemService {
         List<Comment> comments = commentRepository.findAllByItemId(itemId);
         itemDTO.setComments(new HashSet<>(comments.stream().map(mapper::toCommentDTO)
                 .collect(Collectors.toList())));
-
         return itemDTO;
     }
 
@@ -114,8 +113,13 @@ public class ItemService {
                 itemDTO.setNextBooking(nextBookings);
             }
         });
-        return itemsDTO.stream().sorted(Comparator.comparingLong(ItemDTO::getId)).collect(
-                Collectors.toList());
+        return itemsDTO.stream()
+                .sorted(Comparator.comparingLong(ItemDTO::getId))
+                .peek(
+                (itemDTO) -> {
+                    if (itemDTO.getComments() == null) itemDTO.setComments(new HashSet<>());
+                })
+                .collect(Collectors.toList());
     }
 
     public List<Item> searchAvailableItems(String text) {
