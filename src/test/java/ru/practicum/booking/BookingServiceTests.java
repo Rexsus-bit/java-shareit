@@ -3,9 +3,10 @@ package ru.practicum.booking;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import ru.practicum.exceptions.AccessErrorException;
 import ru.practicum.exceptions.ValidationException;
 import ru.practicum.item.Item;
@@ -29,29 +30,16 @@ public class BookingServiceTests {
     private BookingJpaRepository bookingRepository;
     @Mock
     private UserJpaRepository userRepository;
-//    @Mock
-//    private Mapper mapper;
-//
-//    @Mock
-//    private ItemRepository itemRepository;
-
 
     @InjectMocks
     private BookingService bookingService;
 
-
     User owner = new User(1L, "name", "useremail@gmail.com");
     User booker = new User(2L, "name", "bookeremail@gmail.com\"");
-    Item item = new Item(1L, "name", "descript", true, 1L, 1L);
+    Item item = new Item(1L, "name", "description", true, 1L, 1L);
     LocalDateTime startTime = LocalDateTime.now().plusMinutes(5).truncatedTo(ChronoUnit.SECONDS);
     LocalDateTime endTime = LocalDateTime.now().plusMinutes(10).truncatedTo(ChronoUnit.SECONDS);
 
-    BookingDTO bookingDTO = BookingDTO.builder()
-            .id(1L)
-            .start(startTime)
-            .end(endTime)
-            .itemId(1L)
-            .build();
     Booking booking = Booking.builder()
             .id(1L)
             .start(startTime)
@@ -60,13 +48,6 @@ public class BookingServiceTests {
             .booker(booker)
             .status(Status.WAITING)
             .build();
-
-
-//    @BeforeEach
-//    void setUp(){
-//
-//
-//    }
 
     @Test
     public void shouldCreateBookingTest() {
@@ -93,11 +74,10 @@ public class BookingServiceTests {
     public void shouldFailCreateBookingInPastTest() {
         Assertions.assertThrows(ValidationException.class,
                 () -> bookingService.createBooking(new Booking(2L,
-                        LocalDateTime.now().minusMinutes(2),
-                        LocalDateTime.now().minusMinutes(1),null, null, null),
+                                LocalDateTime.now().minusMinutes(2),
+                                LocalDateTime.now().minusMinutes(1), null, null, null),
                         booker.getId()));
     }
-
 
     @Test
     public void shouldConfirmBookingTest() {
