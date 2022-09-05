@@ -31,15 +31,13 @@ public class BookingService {
         if (userId == booking.getItem().getOwnerId()) {
             throw new AccessErrorException();
         }
-
-        bookingRepository.save(booking);
-        return bookingRepository.getById(booking.getId());
+        return bookingRepository.save(booking);
     }
 
-    public Booking confirmBooking(long userId, long bookingId, boolean approval) {
+    public Booking confirmBooking(long ownerId, long bookingId, boolean approval) {
 
-        Booking booking = bookingRepository.getById(bookingId);
-        if (userId != booking.getItem().getOwnerId()) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(NotExistedUserException:: new);
+        if (ownerId != booking.getItem().getOwnerId()) {
             throw new AccessErrorException();
         }
         if (booking.getStatus() == Status.APPROVED) {

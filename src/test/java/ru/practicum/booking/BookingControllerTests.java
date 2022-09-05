@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.common.Mapper;
+import ru.practicum.item.Item;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -44,7 +45,7 @@ public class BookingControllerTests {
             .id(1L)
             .start(startTime)
             .end(endTime)
-//            .item(new Item())
+            .item(new Item())
             .status(Status.APPROVED)
             .build();
     BookingDTO bookingDTO = BookingDTO.builder()
@@ -135,6 +136,5 @@ public class BookingControllerTests {
                 .andExpect(jsonPath("$.[0].end", is(booking.getEnd().toString()), String.class))
                 .andExpect(jsonPath("$.[0].status", is(booking.getStatus().toString()), String.class));
     }
-
 
 }
