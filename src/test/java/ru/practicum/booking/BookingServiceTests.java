@@ -201,18 +201,18 @@ public class BookingServiceTests {
         when(bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(anyLong(), ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(list);
 
-        assertThat(bookingService.getAllOwnerBookings
-                (1L, State.ALL, 0, 5), equalTo(list));
-        assertThat(bookingService.getAllOwnerBookings
-                (1L, State.PAST, 0, 5), equalTo(list));
-        assertThat(bookingService.getAllOwnerBookings
-                (1L, State.CURRENT, 0, 5), equalTo(list));
-        assertThat(bookingService.getAllOwnerBookings
-                (1L, State.FUTURE, 0, 5), equalTo(list));
-        assertThat(bookingService.getAllOwnerBookings
-                (1L, State.WAITING, 0, 5), equalTo(list));
-        assertThat(bookingService.getAllOwnerBookings
-                (1L, State.REJECTED, 0, 5), equalTo(list));
+        assertThat(bookingService.getAllOwnerBookings(1L, State.ALL, 0, 5),
+                equalTo(list));
+        assertThat(bookingService.getAllOwnerBookings(1L, State.PAST, 0, 5),
+                equalTo(list));
+        assertThat(bookingService.getAllOwnerBookings(1L, State.CURRENT, 0, 5),
+                equalTo(list));
+        assertThat(bookingService.getAllOwnerBookings(1L, State.FUTURE, 0, 5),
+                equalTo(list));
+        assertThat(bookingService.getAllOwnerBookings(1L, State.WAITING, 0, 5),
+                equalTo(list));
+        assertThat(bookingService.getAllOwnerBookings(1L, State.REJECTED, 0, 5),
+                equalTo(list));
     }
 
 }
