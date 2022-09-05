@@ -23,7 +23,7 @@ public class BookingService {
     private final UserJpaRepository userRepository;
     private final Mapper mapper;
 
-    public Booking create(@Valid Booking booking, long userId) {
+    public Booking createBooking(@Valid Booking booking, long userId) {
 
         if (booking.getStart().isBefore(LocalDateTime.now())
                 || booking.getEnd().isBefore(LocalDateTime.now()))

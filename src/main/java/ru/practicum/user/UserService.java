@@ -11,26 +11,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
-//    private final UserInMemoryRepository userRepository;
     private final UserJpaRepository repository;
 
     public UserDTO create(User user) {
-//        userValidation(user);
         return Mapper.toUserDto(repository.save(user));
     }
 
-//    private void userValidation(User user) {
-//        userRepository.getUsers().values().forEach(
-//                user1 -> {
-//                    if (user1.getEmail().equals(user.getEmail()))
-//                        throw new ValidationException();
-//                }
-//        );
-//    }
-
     public UserDTO update(User user) {
-//        userValidation(user);
         return Mapper.toUserDto(repository.save(userFieldsUpdate(user)));
     }
 

@@ -67,8 +67,8 @@ class UserControllerTests {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(userDTO.getId()), long.class))
-                .andExpect(jsonPath("$.name", is(userDTO.getName())))
-                .andExpect(jsonPath("$.email", is(userDTO.getEmail())));
+                .andExpect(jsonPath("$.name", is(userDTO.getName() ), String.class))
+                .andExpect(jsonPath("$.email", is(userDTO.getEmail()), String.class));
     }
 
 

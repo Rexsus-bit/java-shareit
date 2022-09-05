@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.booking.Booking;
+import ru.practicum.booking.BookingJpaRepository;
 import ru.practicum.booking.BookingLinksDTO;
 import ru.practicum.booking.BookingService;
 import ru.practicum.user.User;
@@ -31,6 +32,7 @@ public class ItemServiceIntegrationTests {
     private final UserService userService;
     private final ItemService itemService;
     private final BookingService bookingService;
+    private final BookingJpaRepository bookingJpaRepository;
 
     private final DataBaseCleaner dataBaseCleaner;
 
@@ -56,16 +58,16 @@ public class ItemServiceIntegrationTests {
                 .available(true)
                 .ownerId(userDTO.getId())
                 .build();
-
+        item1 = itemService.create(item1, userDTO.getId());
+        item2 = itemService.create(item2, userDTO.getId());
 
     }
 
     @Test
-    public void shouldGetAllItemsOfOwner() {
+    public void shouldGetAllUserItems() {
         assertThat(userDTO, hasProperty("id", equalTo(1L)));
 
-        item1 = itemService.create(item1, userDTO.getId());
-        item2 = itemService.create(item2, userDTO.getId());
+
 
         assertThat(itemService.getAllUserItems(1L, 0, 3), equalTo(List.of(itemService.getItem(1,2), itemService.getItem(2,2))));
 
@@ -81,7 +83,7 @@ public class ItemServiceIntegrationTests {
                 .end(LocalDateTime.now().plusMinutes(2))
                 .booker(userBooker)
                 .build();
-        booking1ForItem1 = bookingService.create(booking1ForItem1, userBookerDTO.getId());
+        booking1ForItem1 = bookingService.createBooking(booking1ForItem1, userBookerDTO.getId());
 
         Booking booking2ForItem1 = Booking.builder()
                 .item(item1)
@@ -89,8 +91,7 @@ public class ItemServiceIntegrationTests {
                 .end(LocalDateTime.now().plusMinutes(6))
                 .booker(userBooker)
                 .build();
-        bookingService.create(booking2ForItem1, userBookerDTO.getId());
-
+        bookingService.createBooking(booking2ForItem1, userBookerDTO.getId());
 
         Booking booking1ForItem2 = Booking.builder()
                 .item(item2)
@@ -98,7 +99,7 @@ public class ItemServiceIntegrationTests {
                 .end(LocalDateTime.now().plusMinutes(2))
                 .booker(userBooker)
                 .build();
-        booking1ForItem2 = bookingService.create(booking1ForItem2, userBookerDTO.getId());
+        booking1ForItem2 = bookingService.createBooking(booking1ForItem2, userBookerDTO.getId());
 
         Booking booking2ForItem2 = Booking.builder()
                 .item(item2)
@@ -106,7 +107,7 @@ public class ItemServiceIntegrationTests {
                 .end(LocalDateTime.now().plusMinutes(4))
                 .booker(userBooker)
                 .build();
-        bookingService.create(booking2ForItem2, userBookerDTO.getId());
+        bookingService.createBooking(booking2ForItem2, userBookerDTO.getId());
 
         List<ItemDTO> allUserItemsList = itemService.getAllUserItems(1, 0, 5);
 
@@ -125,13 +126,12 @@ public class ItemServiceIntegrationTests {
 
     @Test
     void shouldFindItems() {
-
-        item1 = itemService.create(item1, userDTO.getId());
-        item2 = itemService.create(item2, userDTO.getId());
-
         assertThat(itemService.searchAvailableItems("ОТВЕРТКА"), equalTo(List.of(item1)));
-
     }
 
+    @Test
+    public void shouldUpdate() {
+
+    }
 
 }
