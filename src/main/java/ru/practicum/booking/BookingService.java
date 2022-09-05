@@ -77,8 +77,8 @@ public class BookingService {
                 return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING, page);
             case REJECTED:
                 return bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED, page);
+            default: return null;
         }
-        return null;
     }
 
     public List<Booking> getAllOwnerBookings(long userId, State state, Integer from, Integer size) {
