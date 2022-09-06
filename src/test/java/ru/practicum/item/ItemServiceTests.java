@@ -14,7 +14,6 @@ import ru.practicum.common.Mapper;
 import ru.practicum.exceptions.NotExistedUserException;
 import ru.practicum.user.User;
 import ru.practicum.user.UserDTO;
-import ru.practicum.user.UserJpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,8 +31,6 @@ public class ItemServiceTests {
 
     @Mock
     private ItemJpaRepository itemRepository;
-    @Mock
-    private UserJpaRepository userRepository;
 
     @Mock
     private CommentJpaRepository commentRepository;

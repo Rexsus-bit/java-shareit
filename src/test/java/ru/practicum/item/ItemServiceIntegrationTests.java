@@ -129,9 +129,4 @@ public class ItemServiceIntegrationTests {
         assertThat(itemService.searchAvailableItems("ОТВЕРТКА"), equalTo(List.of(item1)));
     }
 
-    @Test
-    public void shouldUpdate() {
-
-    }
-
 }

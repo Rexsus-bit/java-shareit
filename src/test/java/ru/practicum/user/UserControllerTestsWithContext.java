@@ -45,8 +45,6 @@ public class UserControllerTestsWithContext {
         user = new User(1L, "Tom", "test@es.we");
     }
 
-
-
     @Test
     void shouldCreateUserTest() throws Exception {
         when(userService.create(user))
@@ -153,10 +151,5 @@ public class UserControllerTestsWithContext {
                 .andExpect(jsonPath("$.name", is(userDTO.getName())))
                 .andExpect(jsonPath("$.email", is(userDTO.getEmail())));
     }
-
-
-
-
-
 
 }
