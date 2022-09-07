@@ -1,8 +1,6 @@
 package ru.practicum.item;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import ru.practicum.user.User;
 
 import javax.persistence.*;
