@@ -22,4 +22,5 @@ public class ItemRequest {
     @Column(name = "requester_id")
     private long requesterId;
     private LocalDateTime created;
+
 }
