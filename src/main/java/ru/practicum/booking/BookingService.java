@@ -82,7 +82,7 @@ public class BookingService {
     }
 
     public List<Booking> getAllOwnerBookings(long userId, State state, Integer from, Integer size) {
-        if (!userRepository.existsById(userId)){
+        if (!userRepository.existsById(userId)) {
             throw new NotExistedUserException();
         }
         LocalDateTime currentTime = LocalDateTime.now();
