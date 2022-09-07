@@ -24,7 +24,7 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final Mapper mapper;
-    private final String header = "X-Sharer-User-Id";
+    private static final String header = "X-Sharer-User-Id";
 
     @PostMapping
     public BookingDTO createBooking(@RequestHeader(header) long userId, @RequestBody @NonNull @Valid BookingDTO bookingDTO) {

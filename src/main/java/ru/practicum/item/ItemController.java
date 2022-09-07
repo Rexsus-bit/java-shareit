@@ -19,7 +19,7 @@ public class ItemController {
 
     private final ItemService itemService;
     private final Mapper mapper;
-    private final String header = "X-Sharer-User-Id";
+    private static final String header = "X-Sharer-User-Id";
 
     @PostMapping
     public ItemDTO create(@RequestHeader(header) long userId, @RequestBody @NonNull @Valid ItemDTO itemDTO) {

@@ -23,7 +23,7 @@ public class ItemRequestService {
     private final ItemRequestJpaRepository itemRequestJpaRepository;
     private final UserJpaRepository userJpaRepository;
     private final Mapper mapper;
-    private final String header = "X-Sharer-User-Id";
+    private static final String header = "X-Sharer-User-Id";
 
 
     public ItemRequestDTO createItemRequest(long userId, @Valid ItemRequestDTO itemRequestDTO) {

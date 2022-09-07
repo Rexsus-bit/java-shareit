@@ -82,7 +82,9 @@ public class BookingService {
     }
 
     public List<Booking> getAllOwnerBookings(long userId, State state, Integer from, Integer size) {
-        if (!userRepository.existsById(userId)) throw new NotExistedUserException();
+        if (!userRepository.existsById(userId)){
+            throw new NotExistedUserException();
+        }
         LocalDateTime currentTime = LocalDateTime.now();
         Pageable page = OffsetLimitPageable.of(from, size, Sort.by(Sort.Direction.DESC, "start"));
         switch (state) {
