@@ -9,9 +9,13 @@ import ru.practicum.exceptions.NotExistedItemException;
 import ru.practicum.exceptions.NotExistedUserException;
 import ru.practicum.exceptions.UnavailableItemException;
 import ru.practicum.item.*;
+import ru.practicum.request.ItemRequest;
+import ru.practicum.request.ItemRequestDTO;
 import ru.practicum.user.User;
 import ru.practicum.user.UserDTO;
 import ru.practicum.user.UserJpaRepository;
+
+import java.time.LocalDateTime;
 
 @Component
 @AllArgsConstructor
@@ -36,12 +40,13 @@ public class Mapper {
                 .build();
     }
 
-    public ItemDTO toItemDto(Item item) {
+    public ItemDTO toItemDTO(Item item) {
         return ItemDTO.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .requestId(item.getRequestId())
                 .build();
     }
 
@@ -51,6 +56,7 @@ public class Mapper {
                 .name(itemDTO.getName())
                 .description(itemDTO.getDescription())
                 .available(itemDTO.getAvailable())
+                .requestId(itemDTO.getRequestId())
                 .build();
     }
 
@@ -92,8 +98,28 @@ public class Mapper {
                 .id(comment.getId())
                 .text(comment.getText())
                 .authorName(comment.getAuthor().getName())
-                .created(true)
+                .created(LocalDateTime.now())
                 .build();
     }
+
+    public ItemRequest toItemRequest(ItemRequestDTO itemRequestDTO) {
+        return ItemRequest.builder()
+                .id(itemRequestDTO.getId())
+                .description(itemRequestDTO.getDescription())
+                .requesterId(itemRequestDTO.getRequesterId())
+                .created(itemRequestDTO.getCreated())
+                .build();
+    }
+
+    public ItemRequestDTO toItemRequestDTO(ItemRequest itemRequest) {
+        return ItemRequestDTO.builder()
+                .id(itemRequest.getId())
+                .description(itemRequest.getDescription())
+                .requesterId(itemRequest.getRequesterId())
+                .created(itemRequest.getCreated())
+                .items(itemRepository.findAllByRequestId(itemRequest.getId()))
+                .build();
+    }
+
 
 }

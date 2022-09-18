@@ -1,9 +1,7 @@
 package ru.practicum.booking;
 
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import ru.practicum.item.Item;
 import ru.practicum.user.User;
 

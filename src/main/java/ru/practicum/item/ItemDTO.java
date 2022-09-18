@@ -1,8 +1,6 @@
 package ru.practicum.item;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import ru.practicum.booking.BookingLinksDTO;
 
 import javax.validation.constraints.NotBlank;
@@ -23,4 +21,5 @@ public class ItemDTO {
     private BookingLinksDTO lastBooking;
     private BookingLinksDTO nextBooking;
     private Set<CommentDTO> comments;
+    private Long requestId;
 }
