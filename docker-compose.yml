@@ -21,9 +21,10 @@ services:
       - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ru-base
-#      - POSTGRES_DB=ru-base
+#     - POSTGRES_DB=ru-base
       - POSTGRES_USER=newuser
       - POSTGRES_PASSWORD=pass
+      - TZ=Europe/Moscow
       - DB_HOST=db
       - DB_PORT=5432
 
