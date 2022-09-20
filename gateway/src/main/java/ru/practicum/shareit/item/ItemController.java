@@ -5,15 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.common.Mapper;
 import ru.practicum.item.Comment;
-import ru.practicum.item.CommentDTO;
 import ru.practicum.item.ItemDTO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
