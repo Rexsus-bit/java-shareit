@@ -17,7 +17,6 @@ import java.util.List;
 public class ItemRequestController {
 
     private final ItemRequestService itemRequestService;
-    private final Mapper mapper;
     private static final String header = "X-Sharer-User-Id";
 
     @PostMapping
