@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.common.Mapper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
