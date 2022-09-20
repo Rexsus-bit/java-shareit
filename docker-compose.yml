@@ -39,5 +39,6 @@ services:
       - POSTGRES_DB=ru-base
       - POSTGRES_USER=newuser
       - POSTGRES_PASSWORD=pass
+      - TZ=Europe/Moscow
 
 
