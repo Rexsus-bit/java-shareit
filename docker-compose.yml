@@ -24,7 +24,7 @@ services:
 #     - POSTGRES_DB=ru-base
       - POSTGRES_USER=newuser
       - POSTGRES_PASSWORD=pass
-      - TZ=Europe/Moscow
+#      - TZ=Europe/Moscow
       - DB_HOST=db
       - DB_PORT=5432
 
@@ -39,6 +39,6 @@ services:
       - POSTGRES_DB=ru-base
       - POSTGRES_USER=newuser
       - POSTGRES_PASSWORD=pass
-      - TZ=Europe/Moscow
+#      - TZ=Europe/Moscow
 
 
