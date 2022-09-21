@@ -26,7 +26,7 @@ public class BookingService {
     public Booking createBooking(@Valid Booking booking, long userId) {
 
         if (booking.getStart().isBefore(LocalDateTime.now())
-                || booking.getEnd().isBefore(LocalDateTime.now()))
+                || booking.getEnd().isBefore(LocalDateTime.now()) || booking.getEnd().isBefore(booking.getStart()))
             throw new ValidationException();
         if (userId == booking.getItem().getOwnerId()) {
             throw new AccessErrorException();
